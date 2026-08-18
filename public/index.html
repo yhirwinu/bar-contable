@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Contable - Smoothies y Algo Mas</title>
+  <title>Sistema Contable - Bar El Destilado</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,9 +21,9 @@
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border-t-8 border-terracotta">
       <div class="text-center mb-6">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-terracotta/10 text-terracotta rounded-full mb-3 text-2xl">
-          <i class="fa-solid fa-glass-water"></i>
+          <i class="fa-solid fa-wine-bottle"></i>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900">SMOOTHIES Y ALGO MAS</h1>
+        <h1 class="text-2xl font-bold text-gray-900">BAR EL DESTILADO</h1>
         <p class="text-sm text-gray-500 mt-1">Sistema de Control e Inventario</p>
       </div>
 
@@ -53,43 +53,28 @@
     <aside class="w-full md:w-64 bg-navy text-white flex-shrink-0 flex flex-col justify-between">
       <div>
         <div class="p-5 border-b border-gray-700 flex items-center gap-3">
-          <i class="fa-solid fa-blender text-terracotta text-2xl"></i>
+          <i class="fa-solid fa-beer-mug-empty text-terracotta text-2xl"></i>
           <div>
-            <h2 class="font-bold text-sm tracking-wider">SMOOTHIES Y ALGO MAS</h2>
+            <h2 class="font-bold text-sm tracking-wider">EL DESTILADO</h2>
             <p class="text-xs text-gray-400">Control Financiero</p>
           </div>
         </div>
 
         <nav class="p-3 space-y-1">
           <button onclick="nav('inicio')" id="nav-inicio" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-terracotta text-white">
-            <i class="fa-solid fa-chart-line w-5"></i> Inicio
-          </button>
-          <button onclick="nav('cuentasHoy')" id="nav-cuentasHoy" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-receipt w-5"></i> Cuentas de Hoy
-          </button>
-          <button onclick="nav('cuentasPendientes')" id="nav-cuentasPendientes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-user-clock w-5"></i> Cuentas Pendientes
+            <i class="fa-solid fa-chart-line w-5"></i> Inicio & Ventas
           </button>
           <button onclick="nav('inventario')" id="nav-inventario" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
             <i class="fa-solid fa-boxes-stacked w-5"></i> Inventario
           </button>
-          <button onclick="nav('caja')" id="nav-caja" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-wallet w-5"></i> Caja Semanal
-          </button>
           <button onclick="nav('registro')" id="nav-registro" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-book w-5"></i> Registro del Día
-          </button>
-          <button onclick="nav('informes')" id="nav-informes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-file-invoice-dollar w-5"></i> Informes
-          </button>
-          <button onclick="nav('config')" id="nav-config" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10">
-            <i class="fa-solid fa-gear w-5"></i> Configuración
+            <i class="fa-solid fa-book w-5"></i> Historial de Ventas
           </button>
         </nav>
       </div>
 
       <div class="p-4 border-t border-gray-700 flex justify-between items-center">
-        <span class="text-xs font-semibold text-gray-300" id="currentUserName">yhirwin</span>
+        <span class="text-xs font-semibold text-gray-300" id="currentUserName">admin</span>
         <button onclick="logout()" class="text-gray-400 hover:text-red-400 text-sm" title="Salir">
           <i class="fa-solid fa-right-from-bracket"></i> Salir
         </button>
@@ -107,143 +92,65 @@
 
       <div class="p-6 flex-1 overflow-y-auto space-y-6">
 
-        <!-- 1. INICIO -->
+        <!-- 1. INICIO & VENTAS -->
         <div id="view-inicio" class="view-panel space-y-6">
-
-          <!-- AJUSTE TASA DE CAMBIO -->
-          <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold">
-                <i class="fa-solid fa-money-bill-transfer"></i>
-              </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-cash-register text-terracotta mr-2"></i> Registrar Venta de Cervezas</h2>
+            
+            <form id="formVenta" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <span class="text-xs font-bold uppercase text-gray-500">Tasa de Cambio del Día</span>
-                <div class="text-lg font-extrabold text-emerald-700" id="displayTasa">$1 USD = 840.00 Bs.</div>
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Producto</label>
+                <select id="ventaProducto" required class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                  <!-- Se llena por JS -->
+                </select>
               </div>
-            </div>
-            <form id="formTasa" class="flex items-center gap-2">
-              <input type="number" step="0.01" id="inputTasa" placeholder="Ej: 840" required class="border p-2 rounded-lg text-sm w-32">
-              <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded-lg text-sm">
-                Actualizar Tasa
+
+              <div>
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Presentación</label>
+                <select id="ventaPresentacion" required class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                  <option value="1">Unidad (1 Cerveza - $1.00 / 700 Bs)</option>
+                  <option value="6">Medio Tobo (6 Cervezas - $5.00 / 4.200 Bs)</option>
+                  <option value="12">Tobo Completo (12 Cervezas - $10.00 / 8.000 Bs)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Moneda de Pago</label>
+                <select id="ventaMoneda" required class="w-full border p-2.5 rounded-lg text-sm bg-white">
+                  <option value="USD">Dólares ($ USD)</option>
+                  <option value="BS">Bolívares (Bs)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="sm:col-span-3 bg-terracotta hover:bg-orange-700 text-white font-bold py-3 rounded-lg text-sm shadow">
+                Procesar Venta y Descontar Stock
               </button>
             </form>
-          </div>
-
-          <!-- ALERTA STOCK BAJO -->
-          <div id="alertaStockBajo" class="hidden bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm">
-            <div class="flex items-center">
-              <i class="fa-solid fa-triangle-exclamation text-red-500 text-xl mr-3"></i>
-              <div>
-                <h3 class="text-sm font-bold text-red-800">¡Alerta de Stock Bajo! (Menos de 20 unidades)</h3>
-                <p class="text-xs text-red-600 mt-0.5" id="textoAlertaStock"></p>
-              </div>
-            </div>
           </div>
 
           <!-- KPIS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="bg-navy text-white p-5 rounded-xl shadow border-l-4 border-terracotta">
-              <span class="text-xs uppercase font-semibold text-gray-300">Ventas Cobradas (Hoy)</span>
-              <p class="text-xl font-bold mt-1" id="kpi-ventas-hoy">$0.00</p>
-              <span class="text-xs text-orange-200" id="kpi-ventas-hoy-bs">0.00 Bs.</span>
+              <span class="text-xs uppercase font-semibold text-gray-300">Stock Actual de Cervezas</span>
+              <p class="text-2xl font-bold mt-1" id="kpi-stock">0 unids.</p>
             </div>
             <div class="bg-terracotta text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-orange-100">Cuentas Activas Hoy</span>
-              <p class="text-2xl font-bold mt-1" id="kpi-cuentas-hoy">0</p>
+              <span class="text-xs uppercase font-semibold text-orange-100">Ventas Totales Registradas</span>
+              <p class="text-2xl font-bold mt-1" id="kpi-ventas">0</p>
             </div>
-            <div class="bg-amber-600 text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-amber-100">Cuentas Pendientes (Deudas)</span>
-              <p class="text-xl font-bold mt-1" id="kpi-pendientes">$0.00</p>
-              <span class="text-xs text-amber-200" id="kpi-pendientes-bs">0.00 Bs.</span>
-            </div>
-            <div class="bg-emerald-800 text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-emerald-200">Efectivo en Caja Total (Lun - Vie)</span>
-              <p class="text-xl font-bold mt-1" id="kpi-caja">$0.00</p>
-              <span class="text-xs text-emerald-200" id="kpi-caja-bs">0.00 Bs.</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Ingresos Acumulados de la Semana (Lunes a Viernes)</h2>
-            <div class="h-64"><canvas id="graficaCaja"></canvas></div>
           </div>
         </div>
 
-        <!-- 2. CUENTAS DE HOY -->
-        <div id="view-cuentasHoy" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-3">Abrir Nueva Cuenta / Mesa</h2>
-            <form id="formNuevaCuentaHoy" class="flex gap-3">
-              <input type="text" id="nombreMesa" placeholder="Ej: Mesa 1, Pedido Carlos, Barra" required class="flex-1 border p-2.5 rounded-lg text-sm">
-              <button type="submit" class="bg-navy text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-slate-800">
-                + Abrir Cuenta
-              </button>
-            </form>
-          </div>
-
-          <div id="gridCuentasHoy" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-
-        <!-- 3. CUENTAS PENDIENTES -->
-        <div id="view-cuentasPendientes" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Registrar Deuda (Descuenta de Inventario)</h2>
-            <form id="formNuevaDeuda" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <input type="text" id="deudorNombre" placeholder="Deudor (Ej: Pedro)" required class="border p-2.5 rounded-lg text-sm">
-              <select id="deudorProducto" required class="border p-2.5 rounded-lg text-sm"></select>
-              <input type="number" id="deudorCant" value="1" min="1" required class="border p-2.5 rounded-lg text-sm">
-              <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-lg text-sm">
-                Guardar Deuda
-              </button>
-            </form>
-          </div>
-
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Lista de Deudores Pendientes</div>
-            <table class="w-full text-left text-sm">
-              <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr>
-                  <th class="p-3">Deudor</th>
-                  <th class="p-3">Pedido</th>
-                  <th class="p-3">Monto ($ / Bs.)</th>
-                  <th class="p-3 text-right">Acción</th>
-                </tr>
-              </thead>
-              <tbody id="tablaPendientes" class="divide-y divide-gray-100"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 4. INVENTARIO -->
+        <!-- 2. INVENTARIO -->
         <div id="view-inventario" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Añadir Producto al Inventario</h2>
-            <form id="formProducto" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <input type="text" id="prodNombre" placeholder="Nombre (Ej: Smoothie Fresa 500ml)" required class="border p-2.5 rounded-lg text-sm">
-
-              <div>
-                <input type="text" id="prodCategoria" list="listCategorias" placeholder="Categoría (Escribe o elige)" required class="w-full border p-2.5 rounded-lg text-sm">
-                <datalist id="listCategorias"></datalist>
-              </div>
-
-              <input type="number" step="0.01" id="prodPrecio" placeholder="Precio en $ USD" required class="border p-2.5 rounded-lg text-sm">
-              <input type="number" id="prodStock" placeholder="Stock Inicial" required class="border p-2.5 rounded-lg text-sm">
-              <button type="submit" class="sm:col-span-4 bg-terracotta hover:bg-orange-700 text-white font-bold py-2.5 rounded-lg text-sm">
-                + Añadir al Inventario
-              </button>
-            </form>
-          </div>
-
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Stock Actual del Negocio</div>
+            <div class="p-4 border-b font-bold bg-gray-50">Inventario Actual de Cervezas</div>
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
                   <th class="p-3">Producto</th>
                   <th class="p-3">Categoría</th>
-                  <th class="p-3">Precio ($ / Bs.)</th>
-                  <th class="p-3">Stock</th>
-                  <th class="p-3 text-right">Acción</th>
+                  <th class="p-3">Stock Disponible</th>
                 </tr>
               </thead>
               <tbody id="tablaInventario" class="divide-y divide-gray-100"></tbody>
@@ -251,134 +158,25 @@
           </div>
         </div>
 
-        <!-- 5. CAJA SEMANAL -->
-        <div id="view-caja" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-4">
-            <div>
-              <h2 class="text-lg font-bold text-gray-800 mb-1">Caja Semanal Acumulada (Lunes a Viernes)</h2>
-              <p class="text-xs text-gray-500">Todas las ventas cobradas ingresan automáticamente según el día laboral.</p>
-            </div>
-            
-            <button onclick="limpiarCajaSemanal()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 shadow">
-              <i class="fa-solid fa-broom"></i> Limpiar Caja Semanal (Reiniciar a $0)
-            </button>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 class="text-sm font-bold text-gray-700 mb-3">Inyección Manual de Dinero</h3>
-            <form id="formCajaEntrada" class="flex gap-3 max-w-md">
-              <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo ($ USD)" required class="flex-1 border p-2.5 rounded-lg text-sm">
-              <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm">
-                + Inyectar a Caja
-              </button>
-            </form>
-          </div>
-
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <table class="w-full text-left text-sm">
-              <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr>
-                  <th class="p-3">Día</th>
-                  <th class="p-3">Nombre Día</th>
-                  <th class="p-3">Monto Total Acumulado ($ USD / Bs.)</th>
-                </tr>
-              </thead>
-              <tbody id="tablaCajaDiaria" class="divide-y divide-gray-100"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 6. REGISTRO DEL DÍA -->
+        <!-- 3. HISTORIAL DE VENTAS -->
         <div id="view-registro" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-3">
-            <div>
-              <h2 class="text-lg font-bold text-gray-800">Ventas Pagadas / Cobradas del Día</h2>
-              <p class="text-xs text-gray-500">Historial completo de dinero ingresado en el día actual.</p>
-            </div>
-            <button onclick="vaciarRegistroDia()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm">
-              🗑️ Cerrar Cuentas de Hoy (Vaciar Historial)
-            </button>
-          </div>
-
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-4 border-b font-bold bg-gray-50">Historial de Transacciones</div>
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
-                  <th class="p-3">Hora</th>
-                  <th class="p-3">Cliente / Mesa</th>
-                  <th class="p-3">Pedido Consumido</th>
-                  <th class="p-3">Total Cobrado ($ USD / Bs.)</th>
+                  <th class="p-3">ID</th>
+                  <th class="p-3">Producto</th>
+                  <th class="p-3">Cantidad</th>
+                  <th class="p-3">Total Pagado</th>
+                  <th class="p-3">Moneda</th>
+                  <th class="p-3">Fecha / Hora</th>
                 </tr>
               </thead>
-              <tbody id="tablaRegistro" class="divide-y divide-gray-100"></tbody>
+              <tbody id="tablaRegistro" class="divide-y divide-gray-100">
+                <tr><td colspan="6" class="p-4 text-center text-gray-400">No hay ventas registradas aún.</td></tr>
+              </tbody>
             </table>
-          </div>
-        </div>
-
-        <!-- 7. INFORMES -->
-        <div id="view-informes" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Informe Financiero e Inventario Actualizado</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="p-4 bg-gray-50 rounded-lg border">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Valor Total Inventario</span>
-                <p class="text-xl font-bold mt-1" id="inf-valor-inv">$0.00</p>
-                <span class="text-xs text-gray-500" id="inf-valor-inv-bs">0.00 Bs.</span>
-              </div>
-              <div class="p-4 bg-gray-50 rounded-lg border">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Deudas por Cobrar</span>
-                <p class="text-xl font-bold text-amber-600 mt-1" id="inf-deudas">$0.00</p>
-                <span class="text-xs text-amber-600" id="inf-deudas-bs">0.00 Bs.</span>
-              </div>
-              <div class="p-4 bg-gray-50 rounded-lg border">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Caja Acumulada del Día</span>
-                <p class="text-xl font-bold text-emerald-600 mt-1" id="inf-caja">$0.00</p>
-                <span class="text-xs text-emerald-600" id="inf-caja-bs">0.00 Bs.</span>
-              </div>
-            </div>
-
-            <h3 class="text-md font-bold text-gray-800 mb-3">Existencia Restante de Productos</h3>
-            <div class="overflow-x-auto border rounded-lg">
-              <table class="w-full text-left text-sm">
-                <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                  <tr>
-                    <th class="p-3">Producto</th>
-                    <th class="p-3">Categoría</th>
-                    <th class="p-3">Stock Restante</th>
-                    <th class="p-3">Estado</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaInformesStock" class="divide-y divide-gray-100"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- 8. CONFIGURACIÓN & USUARIOS -->
-        <div id="view-config" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
-            <h2 class="text-lg font-bold text-gray-800">Gestión de Usuarios del Sistema</h2>
-
-            <form id="formUsuario" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input type="text" id="newUsername" placeholder="Nuevo Usuario" required class="border p-2.5 rounded-lg text-sm">
-              <input type="password" id="newPassword" placeholder="Contraseña" required class="border p-2.5 rounded-lg text-sm">
-              <button type="submit" class="bg-navy hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg text-sm">
-                + Crear Usuario
-              </button>
-            </form>
-
-            <div class="mt-4">
-              <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Usuarios Registrados</h3>
-              <ul id="listaUsuarios" class="divide-y border rounded-lg text-sm bg-gray-50"></ul>
-            </div>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-2">Resetear Sistema</h2>
-            <p class="text-xs text-gray-500 mb-4">Elimina todos los datos guardados en el navegador y restaura los valores por defecto.</p>
-            <button onclick="if(confirm('¿Seguro que deseas formatear todo el sistema?')) { localStorage.clear(); location.reload(); }" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-xs">
-              ⚠️ Formatear / Resetear Sistema Completo
-            </button>
           </div>
         </div>
 
@@ -387,78 +185,6 @@
   </div>
 
   <script>
-    // OBTENER DÍA DE LA SEMANA (Lunes=0, Martes=1, Miércoles=2, Jueves=3, Viernes=4)
-    function getWeekdayIndex() {
-      const d = new Date().getDay(); // 0:Dom, 1:Lun, 2:Mar, 3:Mié, 4:Jue, 5:Vie, 6:Sáb
-      if (d >= 1 && d <= 5) return d - 1;
-      return 1; // Por defecto Martes si se prueba en fin de semana
-    }
-
-    // ESTADO DE DATOS (LocalStorage)
-    let tasaCambio = parseFloat(localStorage.getItem('smoothies_tasa')) || 840;
-    let inventario = JSON.parse(localStorage.getItem('smoothies_inventario')) || [];
-    let cuentasHoy = JSON.parse(localStorage.getItem('smoothies_cuentasHoy')) || [];
-    let cuentasPendientes = JSON.parse(localStorage.getItem('smoothies_cuentasPendientes')) || [];
-    let registroVentas = JSON.parse(localStorage.getItem('smoothies_registroVentas')) || [];
-    let usuarios = JSON.parse(localStorage.getItem('smoothies_usuarios')) || [{ user: 'yhirwin', pass: 'Inc.123' }];
-    let currentUser = localStorage.getItem('smoothies_currentUser') || 'yhirwin';
-
-    // HORARIO: LUNES A VIERNES
-    let cajaEntradas = JSON.parse(localStorage.getItem('smoothies_caja_5d'));
-    if (!cajaEntradas || cajaEntradas.length !== 5) {
-      cajaEntradas = [
-        { dia: 'Lun', fecha: 'Lunes', monto: 0 },
-        { dia: 'Mar', fecha: 'Martes', monto: 0 },
-        { dia: 'Mié', fecha: 'Miércoles', monto: 0 },
-        { dia: 'Jue', fecha: 'Jueves', monto: 0 },
-        { dia: 'Vie', fecha: 'Viernes', monto: 0 }
-      ];
-    }
-
-    let myChart = null;
-
-    // FORMATEADORES MONEDA
-    function toBs(montoUSD) {
-      return (montoUSD * tasaCambio).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Bs.';
-    }
-
-    function fmtDual(montoUSD) {
-      return `$${montoUSD.toFixed(2)} / ${toBs(montoUSD)}`;
-    }
-
-    // AUTH
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value.trim();
-
-      const found = usuarios.find(x => x.user === u && x.pass === p);
-      if (found) {
-        localStorage.setItem('smoothies_auth', 'true');
-        localStorage.setItem('smoothies_currentUser', u);
-        currentUser = u;
-        showApp();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
-      }
-    });
-
-    function logout() {
-      localStorage.removeItem('smoothies_auth');
-      location.reload();
-    }
-
-    function showApp() {
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('appScreen').classList.remove('hidden');
-      document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      document.getElementById('currentUserName').innerText = currentUser;
-      document.getElementById('inputTasa').value = tasaCambio;
-      renderAll();
-    }
-
-    if (localStorage.getItem('smoothies_auth') === 'true') showApp();
-
     // NAVEGACIÓN
     function nav(view) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
@@ -466,437 +192,107 @@
       document.getElementById(`view-${view}`).classList.remove('hidden');
       const activeBtn = document.getElementById(`nav-${view}`);
       if (activeBtn) activeBtn.classList.replace('text-gray-300', 'bg-terracotta');
-      if (view === 'inicio') renderChart();
     }
 
-    function saveData() {
-      localStorage.setItem('smoothies_tasa', tasaCambio);
-      localStorage.setItem('smoothies_inventario', JSON.stringify(inventario));
-      localStorage.setItem('smoothies_cuentasHoy', JSON.stringify(cuentasHoy));
-      localStorage.setItem('smoothies_cuentasPendientes', JSON.stringify(cuentasPendientes));
-      localStorage.setItem('smoothies_registroVentas', JSON.stringify(registroVentas));
-      localStorage.setItem('smoothies_caja_5d', JSON.stringify(cajaEntradas));
-      localStorage.setItem('smoothies_usuarios', JSON.stringify(usuarios));
-      renderAll();
-    }
-
-    function renderAll() {
-      document.getElementById('displayTasa').innerText = `$1 USD = ${tasaCambio.toFixed(2)} Bs.`;
-      renderStockAlerts();
-      renderInventario();
-      renderCuentasHoy();
-      renderCuentasPendientes();
-      renderRegistro();
-      renderCaja();
-      renderKPIs();
-      renderInformes();
-      renderUsuarios();
-    }
-
-    // TASA DE CAMBIO
-    document.getElementById('formTasa').addEventListener('submit', (e) => {
+    // LOGIN LOGIC
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      tasaCambio = parseFloat(document.getElementById('inputTasa').value) || 1;
-      saveData();
-    });
+      const usuario = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-    // ALERTAS STOCK BAJO (< 20)
-    function renderStockAlerts() {
-      const alertaBox = document.getElementById('alertaStockBajo');
-      const textoAlerta = document.getElementById('textoAlertaStock');
-      
-      const bajoStock = inventario.filter(p => p.stock < 20);
-
-      if (bajoStock.length > 0) {
-        alertaBox.classList.remove('hidden');
-        textoAlerta.innerHTML = bajoStock.map(p => `• <b>${p.nombre}</b> (${p.categoria}): quedan <b>${p.stock}</b> unids.`).join('<br>');
-      } else {
-        alertaBox.classList.add('hidden');
-      }
-    }
-
-    // KPIs & CHARTS
-    function renderKPIs() {
-      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
-      const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
-      const totalCajaSemanal = cajaEntradas.reduce((a, b) => a + b.monto, 0);
-
-      document.getElementById('kpi-ventas-hoy').innerText = `$${totalRegistroHoy.toFixed(2)}`;
-      document.getElementById('kpi-ventas-hoy-bs').innerText = toBs(totalRegistroHoy);
-
-      document.getElementById('kpi-cuentas-hoy').innerText = cuentasHoy.length;
-
-      document.getElementById('kpi-pendientes').innerText = `$${totalDeudas.toFixed(2)}`;
-      document.getElementById('kpi-pendientes-bs').innerText = toBs(totalDeudas);
-
-      document.getElementById('kpi-caja').innerText = `$${totalCajaSemanal.toFixed(2)}`;
-      document.getElementById('kpi-caja-bs').innerText = toBs(totalCajaSemanal);
-    }
-
-    function renderChart() {
-      const ctx = document.getElementById('graficaCaja').getContext('2d');
-      const dataGrafica = cajaEntradas.map(c => c.monto);
-
-      if (myChart) myChart.destroy();
-      myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: cajaEntradas.map(c => c.dia),
-          datasets: [{ label: 'Ingresos Lunes a Viernes ($ USD)', data: dataGrafica, backgroundColor: '#c84b23', borderRadius: 5 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
-    }
-
-    // INVENTARIO & CATEGORÍAS
-    document.getElementById('formProducto').addEventListener('submit', (e) => {
-      e.preventDefault();
-      inventario.push({
-        id: Date.now(),
-        nombre: document.getElementById('prodNombre').value.trim(),
-        categoria: document.getElementById('prodCategoria').value.trim(),
-        precio: parseFloat(document.getElementById('prodPrecio').value),
-        stock: parseInt(document.getElementById('prodStock').value)
-      });
-      document.getElementById('formProducto').reset();
-      saveData();
-    });
-
-    function renderInventario() {
-      const tbody = document.getElementById('tablaInventario');
-      tbody.innerHTML = inventario.length === 0 ? '<tr><td colspan="5" class="p-3 text-gray-400">Sin productos.</td></tr>' :
-        inventario.map(p => `
-          <tr>
-            <td class="p-3 font-semibold">${p.nombre}</td>
-            <td class="p-3 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs border">${p.categoria}</span></td>
-            <td class="p-3 font-medium">${fmtDual(p.precio)}</td>
-            <td class="p-3"><b class="${p.stock < 20 ? 'text-red-600 font-extrabold' : 'text-gray-700'}">${p.stock} unids.</b></td>
-            <td class="p-3 text-right"><button onclick="inventario=inventario.filter(x=>x.id!=${p.id});saveData();" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td>
-          </tr>
-        `).join('');
-
-      const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
-      document.getElementById('listCategorias').innerHTML = categoriasUnicas.map(c => `<option value="${c}">`).join('');
-
-      const selectDeuda = document.getElementById('deudorProducto');
-      selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
-    }
-
-    // CUENTAS DE HOY
-    document.getElementById('formNuevaCuentaHoy').addEventListener('submit', (e) => {
-      e.preventDefault();
-      cuentasHoy.push({
-        id: Date.now(),
-        nombre: document.getElementById('nombreMesa').value.trim(),
-        pedido: [],
-        montoTotal: 0,
-        estado: 'No pagado'
-      });
-      document.getElementById('nombreMesa').value = '';
-      saveData();
-    });
-
-    function renderCuentasHoy() {
-      const grid = document.getElementById('gridCuentasHoy');
-      if (cuentasHoy.length === 0) {
-        grid.innerHTML = '<div class="col-span-full bg-white p-6 rounded-xl text-center text-gray-400">No hay cuentas abiertas actualmente.</div>';
-        return;
-      }
-
-      grid.innerHTML = cuentasHoy.map(c => `
-        <div class="bg-white p-5 rounded-xl shadow border-t-4 border-terracotta flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-gray-800">${c.nombre}</h3>
-              <select onchange="cambiarEstadoCuenta(${c.id}, this.value)" 
-                class="text-xs font-bold px-2 py-1 rounded text-white ${c.estado === 'Pagado' ? 'bg-emerald-600' : 'bg-red-600'}">
-                <option value="No pagado" ${c.estado === 'No pagado' ? 'selected' : ''}>🔴 No Pagado</option>
-                <option value="Pagado" ${c.estado === 'Pagado' ? 'selected' : ''}>🟢 Pagado</option>
-              </select>
-            </div>
-
-            <div class="my-3 border-t border-b py-2 space-y-1.5">
-              <p class="text-xs font-semibold text-gray-500 mb-1">Pedido en curso:</p>
-              ${c.pedido.length === 0 ? '<p class="text-xs text-gray-400 italic">Sin productos añadidos</p>' :
-                c.pedido.map((item, idx) => `
-                  <div class="text-xs flex justify-between items-center bg-gray-50 p-1.5 rounded border border-gray-200">
-                    <span>${item.cant}x ${item.nombre} ($${(item.cant * item.precio).toFixed(2)})</span>
-                    <button onclick="eliminarProdDeCuenta(${c.id}, ${idx})" class="text-red-500 hover:text-red-700 font-bold px-1.5 py-0.5 rounded text-xs hover:bg-red-50" title="Quitar producto y devolver a inventario">
-                      ✕
-                    </button>
-                  </div>
-                `).join('')}
-            </div>
-
-            <div class="flex gap-1 mt-2">
-              <select id="selProd-${c.id}" class="text-xs border p-1 rounded flex-1">
-                ${inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('')}
-              </select>
-              <input type="number" id="cantProd-${c.id}" value="1" min="1" class="text-xs border p-1 rounded w-12">
-              <button onclick="agregarProdACuenta(${c.id})" class="bg-navy text-white text-xs px-2 py-1 rounded font-bold">+ Add</button>
-            </div>
-          </div>
-
-          <div>
-            <div class="border-t pt-3 mt-4 flex flex-col items-end">
-              <span class="text-xs text-gray-500">Monto Total:</span>
-              <span class="text-lg font-bold text-terracotta">$${c.montoTotal.toFixed(2)}</span>
-              <span class="text-xs text-emerald-700 font-semibold">${toBs(c.montoTotal)}</span>
-            </div>
-
-            <!-- BOTÓN BORRAR CUENTA COMPLETA -->
-            <button onclick="borrarCuenta(${c.id})" class="w-full mt-3 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold py-1.5 rounded-lg flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-trash-can"></i> Borrar Cuenta
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function agregarProdACuenta(cuentaId) {
-      const prodId = parseInt(document.getElementById(`selProd-${cuentaId}`).value);
-      const cant = parseInt(document.getElementById(`cantProd-${cuentaId}`).value);
-      const prod = inventario.find(p => p.id === prodId);
-      const cuenta = cuentasHoy.find(c => c.id === cuentaId);
-
-      if (!prod || prod.stock < cant) return alert('Stock insuficiente en inventario');
-
-      prod.stock -= cant; // Descuenta del inventario
-      cuenta.pedido.push({ prodId: prod.id, nombre: prod.nombre, precio: prod.precio, cant: cant });
-      cuenta.montoTotal += prod.precio * cant;
-      saveData();
-    }
-
-    // ELIMINAR UN PRODUCTO DE UNA CUENTA (DEVUELVE STOCK)
-    function eliminarProdDeCuenta(cuentaId, itemIdx) {
-      const cuenta = cuentasHoy.find(c => c.id === cuentaId);
-      if (!cuenta || !cuenta.pedido[itemIdx]) return;
-
-      const item = cuenta.pedido[itemIdx];
-      const prod = inventario.find(p => p.id === item.prodId || p.nombre === item.nombre);
-      
-      if (prod) {
-        prod.stock += item.cant; // Restaura las unidades al inventario
-      }
-
-      cuenta.montoTotal = Math.max(0, cuenta.montoTotal - (item.precio * item.cant));
-      cuenta.pedido.splice(itemIdx, 1);
-      saveData();
-    }
-
-    // BORRAR CUENTA COMPLETA (DEVUELVE TODO AL INVENTARIO)
-    function borrarCuenta(cuentaId) {
-      const cuenta = cuentasHoy.find(c => c.id === cuentaId);
-      if (!cuenta) return;
-
-      if (confirm(`¿Deseas borrar la cuenta "${cuenta.nombre}"? Todos los productos añadidos regresarán al inventario.`)) {
-        cuenta.pedido.forEach(item => {
-          const prod = inventario.find(p => p.id === item.prodId || p.nombre === item.nombre);
-          if (prod) {
-            prod.stock += item.cant; // Restaura stock
-          }
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario, password })
         });
-        cuentasHoy = cuentasHoy.filter(c => c.id !== cuentaId);
-        saveData();
+        const data = await response.json();
+
+        if (data.success) {
+          localStorage.setItem('auth', 'true');
+          showApp();
+        } else {
+          document.getElementById('loginError').classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Error en el login:', error);
       }
+    });
+
+    function logout() {
+      localStorage.removeItem('auth');
+      location.reload();
     }
 
-    function cambiarEstadoCuenta(cuentaId, nuevoEstado) {
-      const cuentaIndex = cuentasHoy.findIndex(c => c.id === cuentaId);
-      if (cuentaIndex === -1) return;
+    function showApp() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('appScreen').classList.remove('hidden');
+      document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      cargarDatos();
+    }
 
-      if (nuevoEstado === 'Pagado') {
-        const c = cuentasHoy[cuentaIndex];
+    if (localStorage.getItem('auth') === 'true') {
+      showApp();
+    }
+
+    // CARGAR DATOS DESDE EL BACKEND
+    async function cargarDatos() {
+      try {
+        const resInv = await fetch('/api/inventario');
+        const inventario = await resInv.json();
         
-        // Registro de la venta
-        registroVentas.push({
-          id: Date.now(),
-          hora: new Date().toLocaleTimeString(),
-          nombre: c.nombre,
-          pedido: c.pedido.map(i => `${i.cant}x ${i.nombre}`).join(', ') || 'Consumo local',
-          montoTotal: c.montoTotal
-        });
-
-        // Suma directa a la caja del día actual (Lun-Vie)
-        const dayIdx = getWeekdayIndex();
-        cajaEntradas[dayIdx].monto += c.montoTotal;
-
-        cuentasHoy.splice(cuentaIndex, 1);
-      }
-      saveData();
-    }
-
-    // CUENTAS PENDIENTES
-    document.getElementById('formNuevaDeuda').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const deudor = document.getElementById('deudorNombre').value.trim();
-      const prodId = parseInt(document.getElementById('deudorProducto').value);
-      const cant = parseInt(document.getElementById('deudorCant').value);
-      const prod = inventario.find(p => p.id === prodId);
-
-      if (!prod || prod.stock < cant) return alert('Stock insuficiente');
-
-      prod.stock -= cant; // Descuenta stock
-      cuentasPendientes.push({
-        id: Date.now(),
-        deudor: deudor,
-        concepto: `${cant}x ${prod.nombre}`,
-        monto: prod.precio * cant
-      });
-      document.getElementById('deudorNombre').value = '';
-      saveData();
-    });
-
-    function renderCuentasPendientes() {
-      const tbody = document.getElementById('tablaPendientes');
-      tbody.innerHTML = cuentasPendientes.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin deudas registradas.</td></tr>' :
-        cuentasPendientes.map(p => `
-          <tr>
-            <td class="p-3 font-semibold">${p.deudor}</td>
-            <td class="p-3 text-gray-500">${p.concepto}</td>
-            <td class="p-3 font-bold text-amber-600">${fmtDual(p.monto)}</td>
-            <td class="p-3 text-right">
-              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
-                💵 Cobrar / Saldar
-              </button>
-            </td>
-          </tr>
-        `).join('');
-    }
-
-    function saldarDeuda(id) {
-      const p = cuentasPendientes.find(x => x.id === id);
-      if (!p) return;
-
-      registroVentas.push({ 
-        id: Date.now(), 
-        hora: new Date().toLocaleTimeString(), 
-        nombre: `Cobro Deuda (${p.deudor})`, 
-        pedido: p.concepto, 
-        montoTotal: p.monto 
-      });
-
-      // Suma a caja del día actual (Lun-Vie)
-      const dayIdx = getWeekdayIndex();
-      cajaEntradas[dayIdx].monto += p.monto;
-
-      cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
-      saveData();
-    }
-
-    // REGISTRO
-    function renderRegistro() {
-      const tbody = document.getElementById('tablaRegistro');
-      tbody.innerHTML = registroVentas.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">No hay ventas registradas hoy.</td></tr>' :
-        registroVentas.slice().reverse().map(r => `
-          <tr>
-            <td class="p-3 text-gray-500">${r.hora}</td>
-            <td class="p-3 font-bold">${r.nombre}</td>
-            <td class="p-3 text-gray-600 text-xs">${r.pedido}</td>
-            <td class="p-3 font-bold text-emerald-600">${fmtDual(r.montoTotal)}</td>
-          </tr>
-        `).join('');
-    }
-
-    function vaciarRegistroDia() {
-      if (confirm('¿Deseas cerrar las ventas registradas del día? El dinero acumulado se mantendrá en la caja semanal.')) {
-        registroVentas = [];
-        saveData();
-      }
-    }
-
-    // CAJA SEMANAL (LUNES A VIERNES)
-    document.getElementById('formCajaEntrada').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const montoInput = parseFloat(document.getElementById('montoCajaManual').value);
-      const dayIdx = getWeekdayIndex();
-      cajaEntradas[dayIdx].monto += montoInput;
-      document.getElementById('montoCajaManual').value = '';
-      saveData();
-    });
-
-    function limpiarCajaSemanal() {
-      if (confirm('¿Deseas reiniciar la Caja Semanal (Lunes a Viernes) a $0.00?')) {
-        cajaEntradas = [
-          { dia: 'Lun', fecha: 'Lunes', monto: 0 },
-          { dia: 'Mar', fecha: 'Martes', monto: 0 },
-          { dia: 'Mié', fecha: 'Miércoles', monto: 0 },
-          { dia: 'Jue', fecha: 'Jueves', monto: 0 },
-          { dia: 'Vie', fecha: 'Viernes', monto: 0 }
-        ];
-        saveData();
-      }
-    }
-
-    function renderCaja() {
-      document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => `
-        <tr class="${idx === getWeekdayIndex() ? 'bg-orange-50 font-bold' : ''}">
-          <td class="p-3">${c.dia} ${idx === getWeekdayIndex() ? '<span class="text-xs text-terracotta ml-1">(Hoy)</span>' : ''}</td>
-          <td class="p-3 text-gray-500">${c.fecha}</td>
-          <td class="p-3 font-bold text-emerald-600">${fmtDual(c.monto)}</td>
-        </tr>
-      `).join('');
-    }
-
-    // INFORMES
-    function renderInformes() {
-      const totalValorInv = inventario.reduce((a, b) => a + (b.precio * b.stock), 0);
-      const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
-      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
-
-      document.getElementById('inf-valor-inv').innerText = `$${totalValorInv.toFixed(2)}`;
-      document.getElementById('inf-valor-inv-bs').innerText = toBs(totalValorInv);
-
-      document.getElementById('inf-deudas').innerText = `$${totalDeudas.toFixed(2)}`;
-      document.getElementById('inf-deudas-bs').innerText = toBs(totalDeudas);
-
-      document.getElementById('inf-caja').innerText = `$${totalRegistroHoy.toFixed(2)}`;
-      document.getElementById('inf-caja-bs').innerText = toBs(totalRegistroHoy);
-
-      const tbody = document.getElementById('tablaInformesStock');
-      tbody.innerHTML = inventario.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin productos en inventario.</td></tr>' :
-        inventario.map(p => `
+        // Renderizar inventario
+        const tablaInv = document.getElementById('tablaInventario');
+        tablaInv.innerHTML = inventario.map(p => `
           <tr>
             <td class="p-3 font-semibold">${p.nombre}</td>
             <td class="p-3 text-gray-500">${p.categoria}</td>
-            <td class="p-3 font-bold">${p.stock} unids.</td>
-            <td class="p-3">
-              ${p.stock < 20 ? 
-                '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Stock Bajo</span>' : 
-                '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
-            </td>
+            <td class="p-3"><b class="text-terracotta">${p.stock} unids.</b></td>
           </tr>
         `).join('');
+
+        // Llenar selector de productos en ventas
+        const selectProd = document.getElementById('ventaProducto');
+        selectProd.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} (Stock: ${p.stock})</option>`).join('');
+
+        // KPI Stock total
+        const totalStock = inventario.reduce((acc, item) => acc + item.stock, 0);
+        document.getElementById('kpi-stock').innerText = `${totalStock} unids.`;
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+      }
     }
 
-    // USUARIOS (CONFIGURACIÓN)
-    document.getElementById('formUsuario').addEventListener('submit', (e) => {
+    // PROCESAR VENTA
+    document.getElementById('formVenta').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const u = document.getElementById('newUsername').value.trim();
-      const p = document.getElementById('newPassword').value.trim();
+      const productoId = document.getElementById('ventaProducto').value;
+      const presentacion = document.getElementById('ventaPresentacion').value;
+      const moneda = document.getElementById('ventaMoneda').value;
 
-      if (usuarios.some(x => x.user === u)) return alert('El usuario ya existe.');
+      try {
+        const response = await fetch('/api/vender', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productoId, presentacion, moneda })
+        });
+        const data = await response.json();
 
-      usuarios.push({ user: u, pass: p });
-      document.getElementById('formUsuario').reset();
-      saveData();
+        if (data.success) {
+          alert(data.message);
+          document.getElementById('formVenta').reset();
+          cargarDatos();
+          cargarHistorialVentas();
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        console.error('Error al procesar la venta:', error);
+      }
     });
 
-    function renderUsuarios() {
-      const lista = document.getElementById('listaUsuarios');
-      lista.innerHTML = usuarios.map(u => `
-        <li class="p-3 flex justify-between items-center">
-          <span><i class="fa-solid fa-user text-gray-400 mr-2"></i><b>${u.user}</b></span>
-          ${u.user !== 'yhirwin' ? `<button onclick="eliminarUsuario('${u.user}')" class="text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-trash"></i> Eliminar</button>` : '<span class="text-xs text-gray-400">Principal</span>'}
-        </li>
-      `).join('');
-    }
-
-    function eliminarUsuario(u) {
-      if (confirm(`¿Eliminar usuario ${u}?`)) {
-        usuarios = usuarios.filter(x => x.user !== u);
-        saveData();
-      }
+    async function cargarHistorialVentas() {
+      // Opcional si deseas listar el historial localmente o expandir el endpoint en server.js
     }
   </script>
 </body>
