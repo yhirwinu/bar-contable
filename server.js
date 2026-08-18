@@ -4,20 +4,19 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// Sirve los archivos estáticos desde la raíz del proyecto
+app.use(express.static(path.join(__dirname)));
 
-// Base de datos en memoria (puedes adaptarla o expandirla)
+// Base de datos en memoria
 let usuarios = [
-  { id: 1, usuario: 'admin', password: '123' } // Credenciales de acceso corregidas
+  { id: 1, usuario: 'admin', password: '123' }
 ];
 
 let inventario = [
-  { id: 1, nombre: 'Cerveza', categoria: 'Cervezas', stock: 120 } // Stock inicial en unidades
+  { id: 1, nombre: 'Cerveza', categoria: 'Cervezas', stock: 120 }
 ];
 
-let ventas = [];
-
-// 1. Endpoint de Login corregido
+// Endpoint de Login
 app.post('/api/login', (req, res) => {
   const { usuario, password } = req.body;
   const user = usuarios.find(u => u.usuario === usuario && u.password === password);
@@ -29,8 +28,12 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// 2. Endpoint para consultar el inventario actual
+// Endpoint para consultar el inventario actual
 app.get('/api/inventario', (req, res) => {
   res.json(inventario);
 });
 
+// Mantener el servidor activo y escuchando en Render
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor activo en el puerto ${PORT}`);
+});
