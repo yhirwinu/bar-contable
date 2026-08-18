@@ -834,22 +834,75 @@
             <td class="p-3 font-semibold">${p.deudor}</td>
             <td class="p-3 text-gray-500">${p.concepto}</td>
             <td class="p-3 font-bold text-amber-600">${fmtDual(p.monto)}</td>
-            <td class="p-3 text-right">
+            <td class="p-3 text-right flex gap-2 justify-end">
+              <button onclick="abonarDeuda(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
+                Pagar Monto
+              </button>
               <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
-                Cobrar en $ USD
+                Saldar Total
               </button>
             </td>
           </tr>
         `).join('');
     }
 
+    // NUEVA FUNCIÓN: PAGAR OTRO MONTO / ABONO PARCIAL
+    function abonarDeuda(id) {
+      const p = cuentasPendientes.find(x => x.id === id);
+      if (!p) return;
+
+      const montoStr = prompt(`Deuda actual de ${p.deudor}: $${p.monto.toFixed(2)}\nIngrese el monto que desea pagar ($ USD):`, p.monto.toFixed(2));
+      if (montoStr === null) return; // Si cancela
+
+      const montoPago = parseFloat(montoStr);
+      if (isNaN(montoPago) || montoPago <= 0) {
+        alert('Por favor, ingrese un monto válido.');
+        return;
+      }
+
+      if (montoPago > p.monto) {
+        if (!confirm(`El monto ingresado ($${montoPago.toFixed(2)}) es mayor que la deuda actual ($${p.monto.toFixed(2)}). ¿Desea saldar la deuda por completo?`)) {
+          return;
+        }
+      }
+
+      const montoRealAbono = Math.min(montoPago, p.monto);
+
+      // Registrar en ventas/caja
+      registroVentas.push({ 
+        id: Date.now(), 
+        hora: new Date().toLocaleTimeString(), 
+        nombre: `Abono Deuda (${p.deudor})`, 
+        pedido: p.concepto, 
+        montoTotal: montoRealAbono, 
+        monedaCobrada: 'USD', 
+        montoReal: montoRealAbono 
+      });
+
+      const dayIdx = getWeekdayIndex();
+      cajaEntradas[dayIdx].monto += montoRealAbono;
+      cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + montoRealAbono;
+
+      // Descontar del saldo pendiente
+      p.monto -= montoRealAbono;
+
+      // Si la deuda se paga por completo o queda en 0, eliminar de la lista
+      if (p.monto <= 0.001) {
+        cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
+      }
+
+      saveData();
+    }
+
     function saldarDeuda(id) {
       const p = cuentasPendientes.find(x => x.id === id);
       if (!p) return;
 
+      if (!confirm(`¿Cobrar la deuda total de $${p.monto.toFixed(2)} a ${p.deudor}?`)) return;
+
       registroVentas.push({ 
         id: Date.now(), hora: new Date().toLocaleTimeString(), 
-        nombre: `Cobro Deuda (${p.deudor})`, pedido: p.concepto, 
+        nombre: `Cobro Total Deuda (${p.deudor})`, pedido: p.concepto, 
         montoTotal: p.monto, monedaCobrada: 'USD', montoReal: p.monto 
       });
 
