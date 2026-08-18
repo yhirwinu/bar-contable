@@ -4,8 +4,9 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
-// Sirve los archivos estáticos desde la raíz del proyecto
-app.use(express.static(path.join(__dirname)));
+
+// CORRECCIÓN: Indicar que los archivos estáticos están en la carpeta "public"
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Base de datos de usuarios
 let usuarios = [
@@ -83,9 +84,9 @@ app.get('/api/ventas', (req, res) => {
     res.json(ventas);
 });
 
-// Ruta principal
+// CORRECCIÓN: Ruta principal apuntando a index.html dentro de "public"
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Mantener el servidor activo
