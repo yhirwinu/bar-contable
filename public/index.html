@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Contable - Bar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6 text-slate-800">🍸 Control de Caja e Inventario</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Registrar Venta -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4 text-blue-600">Registrar Venta</h2>
+        <form id="formVenta" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Producto</label>
+            <select id="productoId" class="w-full border p-2 rounded mt-1"></select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cantidad</label>
+            <input type="number" id="cantidad" value="1" min="1" class="w-full border p-2 rounded mt-1">
+          </div>
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700">Vender</button>
+        </form>
+      </div>
+
+      <!-- Inventario -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4 text-emerald-600">Stock Actual</h2>
+        <ul id="listaInventario" class="divide-y"></ul>
+      </div>
+    </div>
+
+    <!-- Registro de Ventas -->
+    <div class="bg-white p-6 rounded-lg shadow mt-6">
+      <h2 class="text-xl font-bold mb-4 text-purple-600">Ventas del Día</h2>
+      <ul id="listaVentas" class="divide-y"></ul>
+    </div>
+  </div>
+
+  <script>
+    async function cargarDatos() {
+      const resInv = await fetch('/api/inventario');
+      const inventario = await resInv.json();
+      
+      const select = document.getElementById('productoId');
+      const listaInv = document.getElementById('listaInventario');
+      select.innerHTML = '';
+      listaInv.innerHTML = '';
+
+      inventario.forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.nombre} ($${p.precio})</option>`;
+        listaInv.innerHTML += `<li class="py-2 flex justify-between"><span>${p.nombre} (${p.categoria})</span> <b class="${p.stock < 15 ? 'text-red-500' : 'text-gray-700'}">${p.stock} dispon.</b></li>`;
+      });
+
+      const resVen = await fetch('/api/ventas');
+      const ventas = await resVen.json();
+      const listaVen = document.getElementById('listaVentas');
+      listaVen.innerHTML = '';
+      ventas.reverse().forEach(v => {
+        listaVen.innerHTML += `<li class="py-2 flex justify-between"><span>${v.hora} - ${v.cantidad}x ${v.producto}</span> <b>$${v.total.toFixed(2)}</b></li>`;
+      });
+    }
+
+    document.getElementById('formVenta').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const productoId = document.getElementById('productoId').value;
+      const cantidad = document.getElementById('cantidad').value;
+
+      const res = await fetch('/api/ventas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productoId, cantidad })
+      });
+
+      if (res.ok) {
+        cargarDatos();
+      } else {
+        alert('Error al registrar venta (verifique stock)');
+      }
+    });
+
+    cargarDatos();
+  </script>
+</body>
+</html>

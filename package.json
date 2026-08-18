@@ -1,0 +1,12 @@
+{
+  "name": "bar-contable",
+  "version": "1.0.0",
+  "description": "Sistema de contabilidad e inventario para bar",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
