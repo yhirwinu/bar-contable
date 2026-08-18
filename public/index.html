@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Contable - Bar El Destilado</title>
+  <title>Sistema Contable - Smoothies y Algo Mas</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,23 +21,23 @@
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border-t-8 border-terracotta">
       <div class="text-center mb-6">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-terracotta/10 text-terracotta rounded-full mb-3 text-2xl">
-          <i class="fa-solid fa-glass-martini-alt"></i>
+          <i class="fa-solid fa-glass-water"></i>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900">BAR EL DESTILADO</h1>
-        <p class="text-sm text-gray-500 mt-1">Control de Caja e Inventario</p>
+        <h1 class="text-2xl font-bold text-gray-900">SMOOTHIES Y ALGO MAS</h1>
+        <p class="text-sm text-gray-500 mt-1">Sistema de Control e Inventario</p>
       </div>
 
       <form id="loginForm" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">Usuario</label>
-          <input type="text" id="username" required placeholder="yhirwin" class="w-full p-2.5 border rounded-lg text-sm">
+          <input type="text" id="username" required placeholder="Usuario" class="w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div>
           <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">Contraseña</label>
           <input type="password" id="password" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg text-sm">
         </div>
         <div id="loginError" class="hidden text-red-600 text-xs font-medium text-center bg-red-50 p-2 rounded border border-red-200">
-          Credenciales incorrectas.
+          Usuario o contraseña incorrectos.
         </div>
         <button type="submit" class="w-full bg-terracotta hover:bg-orange-700 text-white font-bold py-3 rounded-lg shadow">
           Ingresar al Sistema
@@ -53,10 +53,10 @@
     <aside class="w-full md:w-64 bg-navy text-white flex-shrink-0 flex flex-col justify-between">
       <div>
         <div class="p-5 border-b border-gray-700 flex items-center gap-3">
-          <i class="fa-solid fa-beer-mug-empty text-terracotta text-2xl"></i>
+          <i class="fa-solid fa-blender text-terracotta text-2xl"></i>
           <div>
-            <h2 class="font-bold text-sm tracking-wider">EL DESTILADO</h2>
-            <p class="text-xs text-gray-400">Sistema Simplificado</p>
+            <h2 class="font-bold text-sm tracking-wider">SMOOTHIES Y ALGO MAS</h2>
+            <p class="text-xs text-gray-400">Control Financiero</p>
           </div>
         </div>
 
@@ -89,9 +89,9 @@
       </div>
 
       <div class="p-4 border-t border-gray-700 flex justify-between items-center">
-        <span class="text-xs font-semibold text-gray-300">yhirwin</span>
+        <span class="text-xs font-semibold text-gray-300" id="currentUserName">yhirwin</span>
         <button onclick="logout()" class="text-gray-400 hover:text-red-400 text-sm" title="Salir">
-          <i class="fa-solid fa-right-from-bracket"></i>
+          <i class="fa-solid fa-right-from-bracket"></i> Salir
         </button>
       </div>
     </aside>
@@ -99,7 +99,7 @@
     <!-- MAIN PANEL -->
     <main class="flex-1 flex flex-col min-w-0">
       <header class="bg-topbar px-6 py-4 flex items-center justify-between border-b border-orange-100">
-        <h1 id="pageTitle" class="text-xl font-bold text-gray-800">Resumen de Hoy</h1>
+        <h1 id="pageTitle" class="text-xl font-bold text-gray-800">Panel Principal</h1>
         <div class="text-xs font-medium text-gray-500 bg-white/80 px-3 py-1.5 rounded-full border border-orange-200">
           <i class="fa-regular fa-calendar-alt text-terracotta mr-1"></i> <span id="fechaActual"></span>
         </div>
@@ -109,27 +109,62 @@
 
         <!-- 1. INICIO -->
         <div id="view-inicio" class="view-panel space-y-6">
+
+          <!-- AJUSTE TASA DE CAMBIO -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase text-gray-500">Tasa de Cambio del Día</span>
+                <div class="text-lg font-extrabold text-emerald-700" id="displayTasa">$1 USD = 840.00 Bs.</div>
+              </div>
+            </div>
+            <form id="formTasa" class="flex items-center gap-2">
+              <input type="number" step="0.01" id="inputTasa" placeholder="Ej: 840" required class="border p-2 rounded-lg text-sm w-32">
+              <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded-lg text-sm">
+                Actualizar Tasa
+              </button>
+            </form>
+          </div>
+
+          <!-- ALERTA STOCK BAJO -->
+          <div id="alertaStockBajo" class="hidden bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm">
+            <div class="flex items-center">
+              <i class="fa-solid fa-triangle-exclamation text-red-500 text-xl mr-3"></i>
+              <div>
+                <h3 class="text-sm font-bold text-red-800">¡Alerta de Stock Bajo! (Menos de 20 unidades)</h3>
+                <p class="text-xs text-red-600 mt-0.5" id="textoAlertaStock"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPIS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-navy text-white p-5 rounded-xl shadow border-l-4 border-terracotta">
               <span class="text-xs uppercase font-semibold text-gray-300">Ventas Cobradas (Hoy)</span>
-              <p class="text-2xl font-bold mt-2" id="kpi-ventas-hoy">$0.00</p>
+              <p class="text-xl font-bold mt-1" id="kpi-ventas-hoy">$0.00</p>
+              <span class="text-xs text-orange-200" id="kpi-ventas-hoy-bs">0.00 Bs.</span>
             </div>
             <div class="bg-terracotta text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-orange-100">Cuentas Activas</span>
-              <p class="text-2xl font-bold mt-2" id="kpi-cuentas-hoy">0</p>
+              <span class="text-xs uppercase font-semibold text-orange-100">Cuentas Activas Hoy</span>
+              <p class="text-2xl font-bold mt-1" id="kpi-cuentas-hoy">0</p>
             </div>
             <div class="bg-amber-600 text-white p-5 rounded-xl shadow">
               <span class="text-xs uppercase font-semibold text-amber-100">Cuentas Pendientes (Deudas)</span>
-              <p class="text-2xl font-bold mt-2" id="kpi-pendientes">$0.00</p>
+              <p class="text-xl font-bold mt-1" id="kpi-pendientes">$0.00</p>
+              <span class="text-xs text-amber-200" id="kpi-pendientes-bs">0.00 Bs.</span>
             </div>
-            <div class="bg-slate-800 text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-gray-300">Efectivo en Caja</span>
-              <p class="text-2xl font-bold mt-2" id="kpi-caja">$0.00</p>
+            <div class="bg-emerald-800 text-white p-5 rounded-xl shadow">
+              <span class="text-xs uppercase font-semibold text-emerald-200">Efectivo en Caja Total</span>
+              <p class="text-xl font-bold mt-1" id="kpi-caja">$0.00</p>
+              <span class="text-xs text-emerald-200" id="kpi-caja-bs">0.00 Bs.</span>
             </div>
           </div>
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Ingresos Acumulados Semanales</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Ingresos Acumulados Semanales ($)</h2>
             <div class="h-64"><canvas id="graficaCaja"></canvas></div>
           </div>
         </div>
@@ -139,7 +174,7 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 class="text-lg font-bold text-gray-800 mb-3">Abrir Nueva Cuenta / Mesa</h2>
             <form id="formNuevaCuentaHoy" class="flex gap-3">
-              <input type="text" id="nombreMesa" placeholder="Ej: Mesa 1, Barra 3, Grupo Carlos" required class="flex-1 border p-2.5 rounded-lg text-sm">
+              <input type="text" id="nombreMesa" placeholder="Ej: Mesa 1, Pedido Carlos, Barra" required class="flex-1 border p-2.5 rounded-lg text-sm">
               <button type="submit" class="bg-navy text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-slate-800">
                 + Abrir Cuenta
               </button>
@@ -152,7 +187,7 @@
         <!-- 3. CUENTAS PENDIENTES -->
         <div id="view-cuentasPendientes" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Registrar Deuda (Descuenta Inventario)</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Registrar Deuda (Descuenta de Inventario)</h2>
             <form id="formNuevaDeuda" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <input type="text" id="deudorNombre" placeholder="Deudor (Ej: Pedro)" required class="border p-2.5 rounded-lg text-sm">
               <select id="deudorProducto" required class="border p-2.5 rounded-lg text-sm"></select>
@@ -164,10 +199,15 @@
           </div>
 
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Lista de Deudores</div>
+            <div class="p-4 border-b font-bold bg-gray-50">Lista de Deudores Pendientes</div>
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr><th class="p-3">Deudor</th><th class="p-3">Pedido</th><th class="p-3">Monto</th><th class="p-3 text-right">Acción</th></tr>
+                <tr>
+                  <th class="p-3">Deudor</th>
+                  <th class="p-3">Pedido</th>
+                  <th class="p-3">Monto ($ / Bs.)</th>
+                  <th class="p-3 text-right">Acción</th>
+                </tr>
               </thead>
               <tbody id="tablaPendientes" class="divide-y divide-gray-100"></tbody>
             </table>
@@ -177,27 +217,35 @@
         <!-- 4. INVENTARIO -->
         <div id="view-inventario" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Añadir Producto Manualmente</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Añadir Producto al Inventario</h2>
             <form id="formProducto" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <input type="text" id="prodNombre" placeholder="Nombre (Ej: Corona 355ml)" required class="border p-2.5 rounded-lg text-sm">
-              <select id="prodCategoria" class="border p-2.5 rounded-lg text-sm">
-                <option value="Cervezas">Cervezas</option>
-                <option value="Tragos">Tragos</option>
-                <option value="Botellas de Licor">Botellas de Licor</option>
-              </select>
-              <input type="number" step="0.01" id="prodPrecio" placeholder="Precio $" required class="border p-2.5 rounded-lg text-sm">
+              <input type="text" id="prodNombre" placeholder="Nombre (Ej: Smoothie Fresa 500ml)" required class="border p-2.5 rounded-lg text-sm">
+
+              <!-- Categoría libre editable -->
+              <div>
+                <input type="text" id="prodCategoria" list="listCategorias" placeholder="Categoría (Escribe o elige)" required class="w-full border p-2.5 rounded-lg text-sm">
+                <datalist id="listCategorias"></datalist>
+              </div>
+
+              <input type="number" step="0.01" id="prodPrecio" placeholder="Precio en $ USD" required class="border p-2.5 rounded-lg text-sm">
               <input type="number" id="prodStock" placeholder="Stock Inicial" required class="border p-2.5 rounded-lg text-sm">
               <button type="submit" class="sm:col-span-4 bg-terracotta hover:bg-orange-700 text-white font-bold py-2.5 rounded-lg text-sm">
-                Añadir al Inventario
+                + Añadir al Inventario
               </button>
             </form>
           </div>
 
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Stock Actual</div>
+            <div class="p-4 border-b font-bold bg-gray-50">Stock Actual del Negocio</div>
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr><th class="p-3">Producto</th><th class="p-3">Categoría</th><th class="p-3">Precio</th><th class="p-3">Stock</th><th class="p-3 text-right">Acción</th></tr>
+                <tr>
+                  <th class="p-3">Producto</th>
+                  <th class="p-3">Categoría</th>
+                  <th class="p-3">Precio ($ / Bs.)</th>
+                  <th class="p-3">Stock</th>
+                  <th class="p-3 text-right">Acción</th>
+                </tr>
               </thead>
               <tbody id="tablaInventario" class="divide-y divide-gray-100"></tbody>
             </table>
@@ -207,18 +255,24 @@
         <!-- 5. CAJA SEMANAL -->
         <div id="view-caja" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-2">Caja Semanal</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-2">Caja Semanal Acumulada</h2>
+            <p class="text-xs text-gray-500 mb-4">Todas las ventas cobradas y deudas pagadas entran automáticamente aquí.</p>
             <form id="formCajaEntrada" class="flex gap-3 max-w-md">
-              <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo ($)" required class="flex-1 border p-2.5 rounded-lg text-sm">
+              <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo ($ USD)" required class="flex-1 border p-2.5 rounded-lg text-sm">
               <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm">
-                + Sumar a Caja
+                + Inyectar a Caja
               </button>
             </form>
           </div>
+
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr><th class="p-3">Día</th><th class="p-3">Fecha</th><th class="p-3">Monto en Caja</th></tr>
+                <tr>
+                  <th class="p-3">Día</th>
+                  <th class="p-3">Fecha</th>
+                  <th class="p-3">Monto Total en Caja ($ USD / Bs.)</th>
+                </tr>
               </thead>
               <tbody id="tablaCajaDiaria" class="divide-y divide-gray-100"></tbody>
             </table>
@@ -227,20 +281,25 @@
 
         <!-- 6. REGISTRO DEL DÍA -->
         <div id="view-registro" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex justify-between items-center">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-3">
             <div>
-              <h2 class="text-lg font-bold text-gray-800">Ventas Pagadas del Día</h2>
-              <p class="text-xs text-gray-500">Historial de cuentas que fueron marcadas como Pagadas hoy.</p>
+              <h2 class="text-lg font-bold text-gray-800">Ventas Pagadas / Cobradas del Día</h2>
+              <p class="text-xs text-gray-500">Historial completo de dinero ingresado en el día actual.</p>
             </div>
             <button onclick="vaciarRegistroDia()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm">
-              🗑️ Cerrar Cuentas de Hoy (Vaciar)
+              🗑️ Cerrar Cuentas de Hoy (Vaciar Historial)
             </button>
           </div>
 
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr><th class="p-3">Hora</th><th class="p-3">Mesa / Cliente</th><th class="p-3">Pedido Consumido</th><th class="p-3">Total Cobrado</th></tr>
+                <tr>
+                  <th class="p-3">Hora</th>
+                  <th class="p-3">Cliente / Mesa</th>
+                  <th class="p-3">Pedido Consumido</th>
+                  <th class="p-3">Total Cobrado ($ USD / Bs.)</th>
+                </tr>
               </thead>
               <tbody id="tablaRegistro" class="divide-y divide-gray-100"></tbody>
             </table>
@@ -250,30 +309,68 @@
         <!-- 7. INFORMES -->
         <div id="view-informes" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Informe Financiero General</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Informe Financiero e Inventario Actualizado</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div class="p-4 bg-gray-50 rounded-lg border">
                 <span class="text-xs text-gray-500 uppercase font-semibold">Valor Total Inventario</span>
                 <p class="text-xl font-bold mt-1" id="inf-valor-inv">$0.00</p>
+                <span class="text-xs text-gray-500" id="inf-valor-inv-bs">0.00 Bs.</span>
               </div>
               <div class="p-4 bg-gray-50 rounded-lg border">
                 <span class="text-xs text-gray-500 uppercase font-semibold">Deudas por Cobrar</span>
                 <p class="text-xl font-bold text-amber-600 mt-1" id="inf-deudas">$0.00</p>
+                <span class="text-xs text-amber-600" id="inf-deudas-bs">0.00 Bs.</span>
               </div>
               <div class="p-4 bg-gray-50 rounded-lg border">
-                <span class="text-xs text-gray-500 uppercase font-semibold">Caja General Acumulada</span>
+                <span class="text-xs text-gray-500 uppercase font-semibold">Caja Acumulada del Día</span>
                 <p class="text-xl font-bold text-emerald-600 mt-1" id="inf-caja">$0.00</p>
+                <span class="text-xs text-emerald-600" id="inf-caja-bs">0.00 Bs.</span>
               </div>
+            </div>
+
+            <!-- DETALLE DE STOCK DE PRODUCTOS EN INVENTARIO -->
+            <h3 class="text-md font-bold text-gray-800 mb-3">Existencia Restante de Productos</h3>
+            <div class="overflow-x-auto border rounded-lg">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                  <tr>
+                    <th class="p-3">Producto</th>
+                    <th class="p-3">Categoría</th>
+                    <th class="p-3">Stock Restante</th>
+                    <th class="p-3">Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaInformesStock" class="divide-y divide-gray-100"></tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- 8. CONFIGURACIÓN -->
+        <!-- 8. CONFIGURACIÓN & USUARIOS -->
         <div id="view-config" class="view-panel hidden space-y-6">
+          <!-- GESTIÓN DE USUARIOS -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+            <h2 class="text-lg font-bold text-gray-800">Gestión de Usuarios del Sistema</h2>
+
+            <form id="formUsuario" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="newUsername" placeholder="Nuevo Usuario" required class="border p-2.5 rounded-lg text-sm">
+              <input type="password" id="newPassword" placeholder="Contraseña" required class="border p-2.5 rounded-lg text-sm">
+              <button type="submit" class="bg-navy hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg text-sm">
+                + Crear Usuario
+              </button>
+            </form>
+
+            <div class="mt-4">
+              <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Usuarios Registrados</h3>
+              <ul id="listaUsuarios" class="divide-y border rounded-lg text-sm bg-gray-50"></ul>
+            </div>
+          </div>
+
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">Configuración</h2>
-            <button onclick="localStorage.clear(); location.reload();" class="bg-red-600 text-white font-bold py-2 px-4 rounded text-xs">
-              ⚠️ Formatear / Resetear Todo el Sistema
+            <h2 class="text-lg font-bold text-gray-800 mb-2">Resetear Sistema</h2>
+            <p class="text-xs text-gray-500 mb-4">Elimina todos los datos guardados en el navegador y restaura los valores por defecto.</p>
+            <button onclick="if(confirm('¿Seguro que deseas formatear todo el sistema?')) { localStorage.clear(); location.reload(); }" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-xs">
+              ⚠️ Formatear / Resetear Sistema Completo
             </button>
           </div>
         </div>
@@ -283,12 +380,16 @@
   </div>
 
   <script>
-    // ESTADO DE DATOS
-    let inventario = JSON.parse(localStorage.getItem('bar_inventario')) || [];
-    let cuentasHoy = JSON.parse(localStorage.getItem('bar_cuentasHoy')) || [];
-    let cuentasPendientes = JSON.parse(localStorage.getItem('bar_cuentasPendientes')) || [];
-    let registroVentas = JSON.parse(localStorage.getItem('bar_registroVentas')) || [];
-    let cajaEntradas = JSON.parse(localStorage.getItem('bar_caja')) || [
+    // ESTADO DE DATOS (LocalStorage)
+    let tasaCambio = parseFloat(localStorage.getItem('smoothies_tasa')) || 840;
+    let inventario = JSON.parse(localStorage.getItem('smoothies_inventario')) || [];
+    let cuentasHoy = JSON.parse(localStorage.getItem('smoothies_cuentasHoy')) || [];
+    let cuentasPendientes = JSON.parse(localStorage.getItem('smoothies_cuentasPendientes')) || [];
+    let registroVentas = JSON.parse(localStorage.getItem('smoothies_registroVentas')) || [];
+    let usuarios = JSON.parse(localStorage.getItem('smoothies_usuarios')) || [{ user: 'yhirwin', pass: 'Inc.123' }];
+    let currentUser = localStorage.getItem('smoothies_currentUser') || 'yhirwin';
+
+    let cajaEntradas = JSON.parse(localStorage.getItem('smoothies_caja')) || [
       { dia: 'Lun', fecha: '12/08', monto: 0 },
       { dia: 'Mar', fecha: '13/08', monto: 0 },
       { dia: 'Mié', fecha: '14/08', monto: 0 },
@@ -300,27 +401,47 @@
 
     let myChart = null;
 
+    // FORMATEADORES MONEDA
+    function toBs(montoUSD) {
+      return (montoUSD * tasaCambio).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Bs.';
+    }
+
+    function fmtDual(montoUSD) {
+      return `$${montoUSD.toFixed(2)} / ${toBs(montoUSD)}`;
+    }
+
     // AUTH
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      if (document.getElementById('username').value === 'yhirwin' && document.getElementById('password').value === 'Inc.123') {
-        localStorage.setItem('bar_auth', 'true');
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+
+      const found = usuarios.find(x => x.user === u && x.pass === p);
+      if (found) {
+        localStorage.setItem('smoothies_auth', 'true');
+        localStorage.setItem('smoothies_currentUser', u);
+        currentUser = u;
         showApp();
       } else {
         document.getElementById('loginError').classList.remove('hidden');
       }
     });
 
-    function logout() { localStorage.removeItem('bar_auth'); location.reload(); }
+    function logout() {
+      localStorage.removeItem('smoothies_auth');
+      location.reload();
+    }
 
     function showApp() {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('appScreen').classList.remove('hidden');
       document.getElementById('fechaActual').innerText = new Date().toLocaleDateString();
+      document.getElementById('currentUserName').innerText = currentUser;
+      document.getElementById('inputTasa').value = tasaCambio;
       renderAll();
     }
 
-    if (localStorage.getItem('bar_auth') === 'true') showApp();
+    if (localStorage.getItem('smoothies_auth') === 'true') showApp();
 
     // NAVEGACIÓN
     function nav(view) {
@@ -333,59 +454,93 @@
     }
 
     function saveData() {
-      localStorage.setItem('bar_inventario', JSON.stringify(inventario));
-      localStorage.setItem('bar_cuentasHoy', JSON.stringify(cuentasHoy));
-      localStorage.setItem('bar_cuentasPendientes', JSON.stringify(cuentasPendientes));
-      localStorage.setItem('bar_registroVentas', JSON.stringify(registroVentas));
-      localStorage.setItem('bar_caja', JSON.stringify(cajaEntradas));
+      localStorage.setItem('smoothies_tasa', tasaCambio);
+      localStorage.setItem('smoothies_inventario', JSON.stringify(inventario));
+      localStorage.setItem('smoothies_cuentasHoy', JSON.stringify(cuentasHoy));
+      localStorage.setItem('smoothies_cuentasPendientes', JSON.stringify(cuentasPendientes));
+      localStorage.setItem('smoothies_registroVentas', JSON.stringify(registroVentas));
+      localStorage.setItem('smoothies_caja', JSON.stringify(cajaEntradas));
+      localStorage.setItem('smoothies_usuarios', JSON.stringify(usuarios));
       renderAll();
     }
 
     function renderAll() {
+      document.getElementById('displayTasa').innerText = `$1 USD = ${tasaCambio.toFixed(2)} Bs.`;
+      renderStockAlerts();
       renderInventario();
       renderCuentasHoy();
       renderCuentasPendientes();
       renderRegistro();
       renderCaja();
       renderKPIs();
+      renderInformes();
+      renderUsuarios();
+    }
+
+    // TASA DE CAMBIO
+    document.getElementById('formTasa').addEventListener('submit', (e) => {
+      e.preventDefault();
+      tasaCambio = parseFloat(document.getElementById('inputTasa').value) || 1;
+      saveData();
+    });
+
+    // ALERTAS STOCK BAJO (< 20)
+    function renderStockAlerts() {
+      const alertaBox = document.getElementById('alertaStockBajo');
+      const textoAlerta = document.getElementById('textoAlertaStock');
+      
+      const bajoStock = inventario.filter(p => p.stock < 20);
+
+      if (bajoStock.length > 0) {
+        alertaBox.classList.remove('hidden');
+        textoAlerta.innerHTML = bajoStock.map(p => `• <b>${p.nombre}</b> (${p.categoria}): quedan <b>${p.stock}</b> unids.`).join('<br>');
+      } else {
+        alertaBox.classList.add('hidden');
+      }
     }
 
     // KPIs & CHARTS
     function renderKPIs() {
       const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
       const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
-      const totalCaja = cajaEntradas.reduce((a, b) => a + b.monto, 0) + totalRegistroHoy;
+      const totalCajaSemanal = cajaEntradas.reduce((a, b) => a + b.monto, 0) + totalRegistroHoy;
 
       document.getElementById('kpi-ventas-hoy').innerText = `$${totalRegistroHoy.toFixed(2)}`;
-      document.getElementById('kpi-cuentas-hoy').innerText = cuentasHoy.length;
-      document.getElementById('kpi-pendientes').innerText = `$${totalDeudas.toFixed(2)}`;
-      document.getElementById('kpi-caja').innerText = `$${totalCaja.toFixed(2)}`;
+      document.getElementById('kpi-ventas-hoy-bs').innerText = toBs(totalRegistroHoy);
 
-      document.getElementById('inf-valor-inv').innerText = `$${inventario.reduce((a, b) => a + (b.precio * b.stock), 0).toFixed(2)}`;
-      document.getElementById('inf-deudas').innerText = `$${totalDeudas.toFixed(2)}`;
-      document.getElementById('inf-caja').innerText = `$${totalCaja.toFixed(2)}`;
+      document.getElementById('kpi-cuentas-hoy').innerText = cuentasHoy.length;
+
+      document.getElementById('kpi-pendientes').innerText = `$${totalDeudas.toFixed(2)}`;
+      document.getElementById('kpi-pendientes-bs').innerText = toBs(totalDeudas);
+
+      document.getElementById('kpi-caja').innerText = `$${totalCajaSemanal.toFixed(2)}`;
+      document.getElementById('kpi-caja-bs').innerText = toBs(totalCajaSemanal);
     }
 
     function renderChart() {
       const ctx = document.getElementById('graficaCaja').getContext('2d');
+      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
+      
+      const dataGrafica = cajaEntradas.map((c, idx) => idx === 6 ? c.monto + totalRegistroHoy : c.monto);
+
       if (myChart) myChart.destroy();
       myChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: cajaEntradas.map(c => c.dia),
-          datasets: [{ label: 'Caja ($)', data: cajaEntradas.map(c => c.monto), backgroundColor: '#c84b23', borderRadius: 5 }]
+          datasets: [{ label: 'Ingresos ($ USD)', data: dataGrafica, backgroundColor: '#c84b23', borderRadius: 5 }]
         },
         options: { responsive: true, maintainAspectRatio: false }
       });
     }
 
-    // INVENTARIO
+    // INVENTARIO & CATEGORÍAS
     document.getElementById('formProducto').addEventListener('submit', (e) => {
       e.preventDefault();
       inventario.push({
         id: Date.now(),
         nombre: document.getElementById('prodNombre').value.trim(),
-        categoria: document.getElementById('prodCategoria').value,
+        categoria: document.getElementById('prodCategoria').value.trim(),
         precio: parseFloat(document.getElementById('prodPrecio').value),
         stock: parseInt(document.getElementById('prodStock').value)
       });
@@ -399,16 +554,20 @@
         inventario.map(p => `
           <tr>
             <td class="p-3 font-semibold">${p.nombre}</td>
-            <td class="p-3 text-gray-500">${p.categoria}</td>
-            <td class="p-3">$${p.precio.toFixed(2)}</td>
-            <td class="p-3"><b class="${p.stock <= 5 ? 'text-red-600' : 'text-gray-700'}">${p.stock} unids.</b></td>
+            <td class="p-3 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs border">${p.categoria}</span></td>
+            <td class="p-3 font-medium">${fmtDual(p.precio)}</td>
+            <td class="p-3"><b class="${p.stock < 20 ? 'text-red-600 font-extrabold' : 'text-gray-700'}">${p.stock} unids.</b></td>
             <td class="p-3 text-right"><button onclick="inventario=inventario.filter(x=>x.id!=${p.id});saveData();" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td>
           </tr>
         `).join('');
 
-      // Actualizar selectores de producto
+      // Actualizar opciones dinámicas de categorías
+      const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
+      document.getElementById('listCategorias').innerHTML = categoriasUnicas.map(c => `<option value="${c}">`).join('');
+
+      // Actualizar selectores en otras pestañas
       const selectDeuda = document.getElementById('deudorProducto');
-      selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio})</option>`).join('');
+      selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
     }
 
     // CUENTAS DE HOY
@@ -428,7 +587,7 @@
     function renderCuentasHoy() {
       const grid = document.getElementById('gridCuentasHoy');
       if (cuentasHoy.length === 0) {
-        grid.innerHTML = '<div class="col-span-full bg-white p-6 rounded-xl text-center text-gray-400">No hay cuentas abiertas.</div>';
+        grid.innerHTML = '<div class="col-span-full bg-white p-6 rounded-xl text-center text-gray-400">No hay cuentas abiertas actualmente.</div>';
         return;
       }
 
@@ -437,7 +596,6 @@
           <div>
             <div class="flex justify-between items-center mb-2">
               <h3 class="font-bold text-gray-800">${c.nombre}</h3>
-              <!-- Selector Desplegable Pagado / No Pagado -->
               <select onchange="cambiarEstadoCuenta(${c.id}, this.value)" 
                 class="text-xs font-bold px-2 py-1 rounded text-white ${c.estado === 'Pagado' ? 'bg-emerald-600' : 'bg-red-600'}">
                 <option value="No pagado" ${c.estado === 'No pagado' ? 'selected' : ''}>🔴 No Pagado</option>
@@ -451,19 +609,19 @@
                 c.pedido.map(i => `<div class="text-xs flex justify-between"><span>${i.cant}x ${i.nombre}</span><b>$${(i.cant * i.precio).toFixed(2)}</b></div>`).join('')}
             </div>
 
-            <!-- Form para añadir producto a la cuenta (Descuenta inventario) -->
             <div class="flex gap-1 mt-2">
               <select id="selProd-${c.id}" class="text-xs border p-1 rounded flex-1">
-                ${inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio})</option>`).join('')}
+                ${inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('')}
               </select>
               <input type="number" id="cantProd-${c.id}" value="1" min="1" class="text-xs border p-1 rounded w-12">
               <button onclick="agregarProdACuenta(${c.id})" class="bg-navy text-white text-xs px-2 py-1 rounded font-bold">+ Add</button>
             </div>
           </div>
 
-          <div class="border-t pt-3 mt-4 flex justify-between items-center">
-            <span class="text-xs font-bold text-gray-600">Monto Total:</span>
+          <div class="border-t pt-3 mt-4 flex flex-col items-end">
+            <span class="text-xs text-gray-500">Monto Total:</span>
             <span class="text-lg font-bold text-terracotta">$${c.montoTotal.toFixed(2)}</span>
+            <span class="text-xs text-emerald-700 font-semibold">${toBs(c.montoTotal)}</span>
           </div>
         </div>
       `).join('');
@@ -477,7 +635,7 @@
 
       if (!prod || prod.stock < cant) return alert('Stock insuficiente en inventario');
 
-      prod.stock -= cant; // Descuento de inventario
+      prod.stock -= cant; // Se descuenta del inventario inmediatamente
       cuenta.pedido.push({ nombre: prod.nombre, precio: prod.precio, cant: cant });
       cuenta.montoTotal += prod.precio * cant;
       saveData();
@@ -489,7 +647,7 @@
 
       if (nuevoEstado === 'Pagado') {
         const c = cuentasHoy[cuentaIndex];
-        // Mover a Registro
+        // Pasa automáticamente a registro de dinero
         registroVentas.push({
           id: Date.now(),
           hora: new Date().toLocaleTimeString(),
@@ -512,7 +670,7 @@
 
       if (!prod || prod.stock < cant) return alert('Stock insuficiente');
 
-      prod.stock -= cant; // Descuento de inventario
+      prod.stock -= cant; // Se descuenta del inventario al fiar
       cuentasPendientes.push({
         id: Date.now(),
         deudor: deudor,
@@ -525,14 +683,16 @@
 
     function renderCuentasPendientes() {
       const tbody = document.getElementById('tablaPendientes');
-      tbody.innerHTML = cuentasPendientes.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin deudas.</td></tr>' :
+      tbody.innerHTML = cuentasPendientes.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin deudas registradas.</td></tr>' :
         cuentasPendientes.map(p => `
           <tr>
             <td class="p-3 font-semibold">${p.deudor}</td>
             <td class="p-3 text-gray-500">${p.concepto}</td>
-            <td class="p-3 font-bold text-amber-600">$${p.monto.toFixed(2)}</td>
+            <td class="p-3 font-bold text-amber-600">${fmtDual(p.monto)}</td>
             <td class="p-3 text-right">
-              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded">Cobrar / Saldar</button>
+              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
+                💵 Cobrar / Saldar
+              </button>
             </td>
           </tr>
         `).join('');
@@ -541,7 +701,14 @@
     function saldarDeuda(id) {
       const p = cuentasPendientes.find(x => x.id === id);
       if (!p) return;
-      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Cobro Deuda (${p.deudor})`, pedido: p.concepto, montoTotal: p.monto });
+      // Cobrar la deuda ingresa el dinero a registro y caja
+      registroVentas.push({ 
+        id: Date.now(), 
+        hora: new Date().toLocaleTimeString(), 
+        nombre: `Cobro Deuda (${p.deudor})`, 
+        pedido: p.concepto, 
+        montoTotal: p.monto 
+      });
       cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
       saveData();
     }
@@ -555,13 +722,13 @@
             <td class="p-3 text-gray-500">${r.hora}</td>
             <td class="p-3 font-bold">${r.nombre}</td>
             <td class="p-3 text-gray-600 text-xs">${r.pedido}</td>
-            <td class="p-3 font-bold text-emerald-600">$${r.montoTotal.toFixed(2)}</td>
+            <td class="p-3 font-bold text-emerald-600">${fmtDual(r.montoTotal)}</td>
           </tr>
         `).join('');
     }
 
     function vaciarRegistroDia() {
-      if (confirm('¿Deseas cerrar las cuentas del día y vaciar el registro?')) {
+      if (confirm('¿Deseas cerrar las cuentas del día? El dinero acumulado se mantendrá en la caja semanal.')) {
         registroVentas = [];
         saveData();
       }
@@ -577,13 +744,77 @@
 
     function renderCaja() {
       const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
-      document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => `
-        <tr>
-          <td class="p-3 font-bold">${c.dia}</td>
-          <td class="p-3 text-gray-500">${c.fecha}</td>
-          <td class="p-3 font-bold text-emerald-600">$${((idx === 6 ? c.monto + totalRegistroHoy : c.monto)).toFixed(2)}</td>
-        </tr>
+      document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => {
+        const totalDia = idx === 6 ? c.monto + totalRegistroHoy : c.monto;
+        return `
+          <tr>
+            <td class="p-3 font-bold">${c.dia}</td>
+            <td class="p-3 text-gray-500">${c.fecha}</td>
+            <td class="p-3 font-bold text-emerald-600">${fmtDual(totalDia)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // INFORMES
+    function renderInformes() {
+      const totalValorInv = inventario.reduce((a, b) => a + (b.precio * b.stock), 0);
+      const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
+      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
+
+      document.getElementById('inf-valor-inv').innerText = `$${totalValorInv.toFixed(2)}`;
+      document.getElementById('inf-valor-inv-bs').innerText = toBs(totalValorInv);
+
+      document.getElementById('inf-deudas').innerText = `$${totalDeudas.toFixed(2)}`;
+      document.getElementById('inf-deudas-bs').innerText = toBs(totalDeudas);
+
+      document.getElementById('inf-caja').innerText = `$${totalRegistroHoy.toFixed(2)}`;
+      document.getElementById('inf-caja-bs').innerText = toBs(totalRegistroHoy);
+
+      const tbody = document.getElementById('tablaInformesStock');
+      tbody.innerHTML = inventario.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin productos en inventario.</td></tr>' :
+        inventario.map(p => `
+          <tr>
+            <td class="p-3 font-semibold">${p.nombre}</td>
+            <td class="p-3 text-gray-500">${p.categoria}</td>
+            <td class="p-3 font-bold">${p.stock} unids.</td>
+            <td class="p-3">
+              ${p.stock < 20 ? 
+                '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Stock Bajo</span>' : 
+                '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
+            </td>
+          </tr>
+        `).join('');
+    }
+
+    // USUARIOS (CONFIGURACIÓN)
+    document.getElementById('formUsuario').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('newUsername').value.trim();
+      const p = document.getElementById('newPassword').value.trim();
+
+      if (usuarios.some(x => x.user === u)) return alert('El usuario ya existe.');
+
+      usuarios.push({ user: u, pass: p });
+      document.getElementById('formUsuario').reset();
+      saveData();
+    });
+
+    function renderUsuarios() {
+      const lista = document.getElementById('listaUsuarios');
+      lista.innerHTML = usuarios.map(u => `
+        <li class="p-3 flex justify-between items-center">
+          <span><i class="fa-solid fa-user text-gray-400 mr-2"></i><b>${u.user}</b></span>
+          ${u.user !== 'yhirwin' ? `<button onclick="eliminarUsuario('${u.user}')" class="text-red-500 hover:text-red-700 text-xs font-bold"><i class="fa-solid fa-trash"></i> Eliminar</button>` : '<span class="text-xs text-gray-400">Principal</span>'}
+        </li>
       `).join('');
+    }
+
+    function eliminarUsuario(u) {
+      if (confirm(`¿Eliminar usuario ${u}?`)) {
+        usuarios = usuarios.filter(x => x.user !== u);
+        saveData();
+      }
     }
   </script>
 </body>
