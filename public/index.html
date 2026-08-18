@@ -157,14 +157,14 @@
               <span class="text-xs text-amber-200" id="kpi-pendientes-bs">0.00 Bs.</span>
             </div>
             <div class="bg-emerald-800 text-white p-5 rounded-xl shadow">
-              <span class="text-xs uppercase font-semibold text-emerald-200">Efectivo en Caja Total</span>
+              <span class="text-xs uppercase font-semibold text-emerald-200">Efectivo en Caja Total (Lun - Vie)</span>
               <p class="text-xl font-bold mt-1" id="kpi-caja">$0.00</p>
               <span class="text-xs text-emerald-200" id="kpi-caja-bs">0.00 Bs.</span>
             </div>
           </div>
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Ingresos Acumulados Semanales ($)</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4">📊 Ingresos Acumulados de la Semana (Lunes a Viernes)</h2>
             <div class="h-64"><canvas id="graficaCaja"></canvas></div>
           </div>
         </div>
@@ -221,7 +221,6 @@
             <form id="formProducto" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <input type="text" id="prodNombre" placeholder="Nombre (Ej: Smoothie Fresa 500ml)" required class="border p-2.5 rounded-lg text-sm">
 
-              <!-- Categoría libre editable -->
               <div>
                 <input type="text" id="prodCategoria" list="listCategorias" placeholder="Categoría (Escribe o elige)" required class="w-full border p-2.5 rounded-lg text-sm">
                 <datalist id="listCategorias"></datalist>
@@ -254,9 +253,19 @@
 
         <!-- 5. CAJA SEMANAL -->
         <div id="view-caja" class="view-panel hidden space-y-6">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-800 mb-1">Caja Semanal Acumulada (Lunes a Viernes)</h2>
+              <p class="text-xs text-gray-500">Todas las ventas cobradas ingresan automáticamente según el día laboral.</p>
+            </div>
+            
+            <button onclick="limpiarCajaSemanal()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 shadow">
+              <i class="fa-solid fa-broom"></i> Limpiar Caja Semanal (Reiniciar a $0)
+            </button>
+          </div>
+
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-2">Caja Semanal Acumulada</h2>
-            <p class="text-xs text-gray-500 mb-4">Todas las ventas cobradas y deudas pagadas entran automáticamente aquí.</p>
+            <h3 class="text-sm font-bold text-gray-700 mb-3">Inyección Manual de Dinero</h3>
             <form id="formCajaEntrada" class="flex gap-3 max-w-md">
               <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo ($ USD)" required class="flex-1 border p-2.5 rounded-lg text-sm">
               <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm">
@@ -270,8 +279,8 @@
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
                   <th class="p-3">Día</th>
-                  <th class="p-3">Fecha</th>
-                  <th class="p-3">Monto Total en Caja ($ USD / Bs.)</th>
+                  <th class="p-3">Nombre Día</th>
+                  <th class="p-3">Monto Total Acumulado ($ USD / Bs.)</th>
                 </tr>
               </thead>
               <tbody id="tablaCajaDiaria" class="divide-y divide-gray-100"></tbody>
@@ -328,7 +337,6 @@
               </div>
             </div>
 
-            <!-- DETALLE DE STOCK DE PRODUCTOS EN INVENTARIO -->
             <h3 class="text-md font-bold text-gray-800 mb-3">Existencia Restante de Productos</h3>
             <div class="overflow-x-auto border rounded-lg">
               <table class="w-full text-left text-sm">
@@ -348,7 +356,6 @@
 
         <!-- 8. CONFIGURACIÓN & USUARIOS -->
         <div id="view-config" class="view-panel hidden space-y-6">
-          <!-- GESTIÓN DE USUARIOS -->
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800">Gestión de Usuarios del Sistema</h2>
 
@@ -380,6 +387,13 @@
   </div>
 
   <script>
+    // OBTENER DÍA DE LA SEMANA (Lunes=0, Martes=1, Miércoles=2, Jueves=3, Viernes=4)
+    function getWeekdayIndex() {
+      const d = new Date().getDay(); // 0:Dom, 1:Lun, 2:Mar, 3:Mié, 4:Jue, 5:Vie, 6:Sáb
+      if (d >= 1 && d <= 5) return d - 1;
+      return 1; // Por defecto Martes si se prueba en fin de semana
+    }
+
     // ESTADO DE DATOS (LocalStorage)
     let tasaCambio = parseFloat(localStorage.getItem('smoothies_tasa')) || 840;
     let inventario = JSON.parse(localStorage.getItem('smoothies_inventario')) || [];
@@ -389,15 +403,17 @@
     let usuarios = JSON.parse(localStorage.getItem('smoothies_usuarios')) || [{ user: 'yhirwin', pass: 'Inc.123' }];
     let currentUser = localStorage.getItem('smoothies_currentUser') || 'yhirwin';
 
-    let cajaEntradas = JSON.parse(localStorage.getItem('smoothies_caja')) || [
-      { dia: 'Lun', fecha: '12/08', monto: 0 },
-      { dia: 'Mar', fecha: '13/08', monto: 0 },
-      { dia: 'Mié', fecha: '14/08', monto: 0 },
-      { dia: 'Jue', fecha: '15/08', monto: 0 },
-      { dia: 'Vie', fecha: '16/08', monto: 0 },
-      { dia: 'Sáb', fecha: '17/08', monto: 0 },
-      { dia: 'Dom', fecha: '18/08', monto: 0 }
-    ];
+    // HORARIO: LUNES A VIERNES
+    let cajaEntradas = JSON.parse(localStorage.getItem('smoothies_caja_5d'));
+    if (!cajaEntradas || cajaEntradas.length !== 5) {
+      cajaEntradas = [
+        { dia: 'Lun', fecha: 'Lunes', monto: 0 },
+        { dia: 'Mar', fecha: 'Martes', monto: 0 },
+        { dia: 'Mié', fecha: 'Miércoles', monto: 0 },
+        { dia: 'Jue', fecha: 'Jueves', monto: 0 },
+        { dia: 'Vie', fecha: 'Viernes', monto: 0 }
+      ];
+    }
 
     let myChart = null;
 
@@ -435,7 +451,7 @@
     function showApp() {
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('appScreen').classList.remove('hidden');
-      document.getElementById('fechaActual').innerText = new Date().toLocaleDateString();
+      document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       document.getElementById('currentUserName').innerText = currentUser;
       document.getElementById('inputTasa').value = tasaCambio;
       renderAll();
@@ -459,7 +475,7 @@
       localStorage.setItem('smoothies_cuentasHoy', JSON.stringify(cuentasHoy));
       localStorage.setItem('smoothies_cuentasPendientes', JSON.stringify(cuentasPendientes));
       localStorage.setItem('smoothies_registroVentas', JSON.stringify(registroVentas));
-      localStorage.setItem('smoothies_caja', JSON.stringify(cajaEntradas));
+      localStorage.setItem('smoothies_caja_5d', JSON.stringify(cajaEntradas));
       localStorage.setItem('smoothies_usuarios', JSON.stringify(usuarios));
       renderAll();
     }
@@ -503,7 +519,7 @@
     function renderKPIs() {
       const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
       const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
-      const totalCajaSemanal = cajaEntradas.reduce((a, b) => a + b.monto, 0) + totalRegistroHoy;
+      const totalCajaSemanal = cajaEntradas.reduce((a, b) => a + b.monto, 0);
 
       document.getElementById('kpi-ventas-hoy').innerText = `$${totalRegistroHoy.toFixed(2)}`;
       document.getElementById('kpi-ventas-hoy-bs').innerText = toBs(totalRegistroHoy);
@@ -519,16 +535,14 @@
 
     function renderChart() {
       const ctx = document.getElementById('graficaCaja').getContext('2d');
-      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
-      
-      const dataGrafica = cajaEntradas.map((c, idx) => idx === 6 ? c.monto + totalRegistroHoy : c.monto);
+      const dataGrafica = cajaEntradas.map(c => c.monto);
 
       if (myChart) myChart.destroy();
       myChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: cajaEntradas.map(c => c.dia),
-          datasets: [{ label: 'Ingresos ($ USD)', data: dataGrafica, backgroundColor: '#c84b23', borderRadius: 5 }]
+          datasets: [{ label: 'Ingresos Lunes a Viernes ($ USD)', data: dataGrafica, backgroundColor: '#c84b23', borderRadius: 5 }]
         },
         options: { responsive: true, maintainAspectRatio: false }
       });
@@ -561,11 +575,9 @@
           </tr>
         `).join('');
 
-      // Actualizar opciones dinámicas de categorías
       const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
       document.getElementById('listCategorias').innerHTML = categoriasUnicas.map(c => `<option value="${c}">`).join('');
 
-      // Actualizar selectores en otras pestañas
       const selectDeuda = document.getElementById('deudorProducto');
       selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
     }
@@ -603,10 +615,17 @@
               </select>
             </div>
 
-            <div class="my-3 border-t border-b py-2 space-y-1">
-              <p class="text-xs font-semibold text-gray-500">Pedido en curso:</p>
+            <div class="my-3 border-t border-b py-2 space-y-1.5">
+              <p class="text-xs font-semibold text-gray-500 mb-1">Pedido en curso:</p>
               ${c.pedido.length === 0 ? '<p class="text-xs text-gray-400 italic">Sin productos añadidos</p>' :
-                c.pedido.map(i => `<div class="text-xs flex justify-between"><span>${i.cant}x ${i.nombre}</span><b>$${(i.cant * i.precio).toFixed(2)}</b></div>`).join('')}
+                c.pedido.map((item, idx) => `
+                  <div class="text-xs flex justify-between items-center bg-gray-50 p-1.5 rounded border border-gray-200">
+                    <span>${item.cant}x ${item.nombre} ($${(item.cant * item.precio).toFixed(2)})</span>
+                    <button onclick="eliminarProdDeCuenta(${c.id}, ${idx})" class="text-red-500 hover:text-red-700 font-bold px-1.5 py-0.5 rounded text-xs hover:bg-red-50" title="Quitar producto y devolver a inventario">
+                      ✕
+                    </button>
+                  </div>
+                `).join('')}
             </div>
 
             <div class="flex gap-1 mt-2">
@@ -618,10 +637,17 @@
             </div>
           </div>
 
-          <div class="border-t pt-3 mt-4 flex flex-col items-end">
-            <span class="text-xs text-gray-500">Monto Total:</span>
-            <span class="text-lg font-bold text-terracotta">$${c.montoTotal.toFixed(2)}</span>
-            <span class="text-xs text-emerald-700 font-semibold">${toBs(c.montoTotal)}</span>
+          <div>
+            <div class="border-t pt-3 mt-4 flex flex-col items-end">
+              <span class="text-xs text-gray-500">Monto Total:</span>
+              <span class="text-lg font-bold text-terracotta">$${c.montoTotal.toFixed(2)}</span>
+              <span class="text-xs text-emerald-700 font-semibold">${toBs(c.montoTotal)}</span>
+            </div>
+
+            <!-- BOTÓN BORRAR CUENTA COMPLETA -->
+            <button onclick="borrarCuenta(${c.id})" class="w-full mt-3 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold py-1.5 rounded-lg flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-trash-can"></i> Borrar Cuenta
+            </button>
           </div>
         </div>
       `).join('');
@@ -635,10 +661,44 @@
 
       if (!prod || prod.stock < cant) return alert('Stock insuficiente en inventario');
 
-      prod.stock -= cant; // Se descuenta del inventario inmediatamente
-      cuenta.pedido.push({ nombre: prod.nombre, precio: prod.precio, cant: cant });
+      prod.stock -= cant; // Descuenta del inventario
+      cuenta.pedido.push({ prodId: prod.id, nombre: prod.nombre, precio: prod.precio, cant: cant });
       cuenta.montoTotal += prod.precio * cant;
       saveData();
+    }
+
+    // ELIMINAR UN PRODUCTO DE UNA CUENTA (DEVUELVE STOCK)
+    function eliminarProdDeCuenta(cuentaId, itemIdx) {
+      const cuenta = cuentasHoy.find(c => c.id === cuentaId);
+      if (!cuenta || !cuenta.pedido[itemIdx]) return;
+
+      const item = cuenta.pedido[itemIdx];
+      const prod = inventario.find(p => p.id === item.prodId || p.nombre === item.nombre);
+      
+      if (prod) {
+        prod.stock += item.cant; // Restaura las unidades al inventario
+      }
+
+      cuenta.montoTotal = Math.max(0, cuenta.montoTotal - (item.precio * item.cant));
+      cuenta.pedido.splice(itemIdx, 1);
+      saveData();
+    }
+
+    // BORRAR CUENTA COMPLETA (DEVUELVE TODO AL INVENTARIO)
+    function borrarCuenta(cuentaId) {
+      const cuenta = cuentasHoy.find(c => c.id === cuentaId);
+      if (!cuenta) return;
+
+      if (confirm(`¿Deseas borrar la cuenta "${cuenta.nombre}"? Todos los productos añadidos regresarán al inventario.`)) {
+        cuenta.pedido.forEach(item => {
+          const prod = inventario.find(p => p.id === item.prodId || p.nombre === item.nombre);
+          if (prod) {
+            prod.stock += item.cant; // Restaura stock
+          }
+        });
+        cuentasHoy = cuentasHoy.filter(c => c.id !== cuentaId);
+        saveData();
+      }
     }
 
     function cambiarEstadoCuenta(cuentaId, nuevoEstado) {
@@ -647,7 +707,8 @@
 
       if (nuevoEstado === 'Pagado') {
         const c = cuentasHoy[cuentaIndex];
-        // Pasa automáticamente a registro de dinero
+        
+        // Registro de la venta
         registroVentas.push({
           id: Date.now(),
           hora: new Date().toLocaleTimeString(),
@@ -655,6 +716,11 @@
           pedido: c.pedido.map(i => `${i.cant}x ${i.nombre}`).join(', ') || 'Consumo local',
           montoTotal: c.montoTotal
         });
+
+        // Suma directa a la caja del día actual (Lun-Vie)
+        const dayIdx = getWeekdayIndex();
+        cajaEntradas[dayIdx].monto += c.montoTotal;
+
         cuentasHoy.splice(cuentaIndex, 1);
       }
       saveData();
@@ -670,7 +736,7 @@
 
       if (!prod || prod.stock < cant) return alert('Stock insuficiente');
 
-      prod.stock -= cant; // Se descuenta del inventario al fiar
+      prod.stock -= cant; // Descuenta stock
       cuentasPendientes.push({
         id: Date.now(),
         deudor: deudor,
@@ -701,7 +767,7 @@
     function saldarDeuda(id) {
       const p = cuentasPendientes.find(x => x.id === id);
       if (!p) return;
-      // Cobrar la deuda ingresa el dinero a registro y caja
+
       registroVentas.push({ 
         id: Date.now(), 
         hora: new Date().toLocaleTimeString(), 
@@ -709,6 +775,11 @@
         pedido: p.concepto, 
         montoTotal: p.monto 
       });
+
+      // Suma a caja del día actual (Lun-Vie)
+      const dayIdx = getWeekdayIndex();
+      cajaEntradas[dayIdx].monto += p.monto;
+
       cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
       saveData();
     }
@@ -728,32 +799,43 @@
     }
 
     function vaciarRegistroDia() {
-      if (confirm('¿Deseas cerrar las cuentas del día? El dinero acumulado se mantendrá en la caja semanal.')) {
+      if (confirm('¿Deseas cerrar las ventas registradas del día? El dinero acumulado se mantendrá en la caja semanal.')) {
         registroVentas = [];
         saveData();
       }
     }
 
-    // CAJA
+    // CAJA SEMANAL (LUNES A VIERNES)
     document.getElementById('formCajaEntrada').addEventListener('submit', (e) => {
       e.preventDefault();
-      cajaEntradas[6].monto += parseFloat(document.getElementById('montoCajaManual').value);
+      const montoInput = parseFloat(document.getElementById('montoCajaManual').value);
+      const dayIdx = getWeekdayIndex();
+      cajaEntradas[dayIdx].monto += montoInput;
       document.getElementById('montoCajaManual').value = '';
       saveData();
     });
 
+    function limpiarCajaSemanal() {
+      if (confirm('¿Deseas reiniciar la Caja Semanal (Lunes a Viernes) a $0.00?')) {
+        cajaEntradas = [
+          { dia: 'Lun', fecha: 'Lunes', monto: 0 },
+          { dia: 'Mar', fecha: 'Martes', monto: 0 },
+          { dia: 'Mié', fecha: 'Miércoles', monto: 0 },
+          { dia: 'Jue', fecha: 'Jueves', monto: 0 },
+          { dia: 'Vie', fecha: 'Viernes', monto: 0 }
+        ];
+        saveData();
+      }
+    }
+
     function renderCaja() {
-      const totalRegistroHoy = registroVentas.reduce((a, b) => a + b.montoTotal, 0);
-      document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => {
-        const totalDia = idx === 6 ? c.monto + totalRegistroHoy : c.monto;
-        return `
-          <tr>
-            <td class="p-3 font-bold">${c.dia}</td>
-            <td class="p-3 text-gray-500">${c.fecha}</td>
-            <td class="p-3 font-bold text-emerald-600">${fmtDual(totalDia)}</td>
-          </tr>
-        `;
-      }).join('');
+      document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => `
+        <tr class="${idx === getWeekdayIndex() ? 'bg-orange-50 font-bold' : ''}">
+          <td class="p-3">${c.dia} ${idx === getWeekdayIndex() ? '<span class="text-xs text-terracotta ml-1">(Hoy)</span>' : ''}</td>
+          <td class="p-3 text-gray-500">${c.fecha}</td>
+          <td class="p-3 font-bold text-emerald-600">${fmtDual(c.monto)}</td>
+        </tr>
+      `).join('');
     }
 
     // INFORMES
