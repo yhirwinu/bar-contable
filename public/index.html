@@ -109,8 +109,6 @@
 
         <!-- 1. INICIO -->
         <div id="view-inicio" class="view-panel space-y-6">
-
-          <!-- AJUSTE TASA DE CAMBIO -->
           <div class="bg-white p-4 rounded-xl shadow-sm border border-emerald-200 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold">
@@ -129,7 +127,6 @@
             </form>
           </div>
 
-          <!-- ALERTA STOCK BAJO -->
           <div id="alertaStockBajo" class="hidden bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm">
             <div class="flex items-center">
               <i class="fa-solid fa-triangle-exclamation text-red-500 text-xl mr-3"></i>
@@ -140,7 +137,6 @@
             </div>
           </div>
 
-          <!-- KPIS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-navy text-white p-5 rounded-xl shadow border-l-4 border-terracotta">
               <span class="text-xs uppercase font-semibold text-gray-300">Cobrado Hoy (Físico/Electrónico)</span>
@@ -184,7 +180,6 @@
               </button>
             </form>
           </div>
-
           <div id="gridCuentasHoy" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
@@ -220,20 +215,16 @@
 
         <!-- 4. INVENTARIO -->
         <div id="view-inventario" class="view-panel hidden space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap gap-4 items-center justify-between">
-            <div>
-              <h2 class="text-lg font-bold text-gray-800 mb-1">Añadir Producto al Inventario</h2>
-              <p class="text-xs text-gray-500">Agrega las cervezas por unidades individuales (Ej: Polar, Categoría: Cervezas, $1, Stock: 100).<br>El sistema calculará automáticamente los tobos y medios tobos.</p>
-            </div>
-          </div>
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">Añadir Producto al Inventario</h2>
+            <p class="text-xs text-gray-500 mb-4">Agrega las cervezas por unidades individuales. El sistema calcula tobos y medios tobos.</p>
             <form id="formProducto" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <input type="text" id="prodNombre" placeholder="Nombre (Ej: Cerveza Zulia)" required class="border p-2.5 rounded-lg text-sm">
               <div>
-                <input type="text" id="prodCategoria" list="listCategorias" placeholder="Categoría (Ej: Cervezas)" required class="w-full border p-2.5 rounded-lg text-sm">
+                <input type="text" id="prodCategoria" list="listCategorias" placeholder="Categoría" required class="w-full border p-2.5 rounded-lg text-sm">
                 <datalist id="listCategorias"></datalist>
               </div>
-              <input type="number" step="0.01" id="prodPrecio" placeholder="Precio Base $ (Ej: 1)" required class="border p-2.5 rounded-lg text-sm">
+              <input type="number" step="0.01" id="prodPrecio" placeholder="Precio Base $" required class="border p-2.5 rounded-lg text-sm">
               <input type="number" id="prodStock" placeholder="Stock Unitario Inicial" required class="border p-2.5 rounded-lg text-sm">
               <button type="submit" class="sm:col-span-4 bg-terracotta hover:bg-orange-700 text-white font-bold py-2.5 rounded-lg text-sm">
                 + Añadir al Inventario
@@ -242,7 +233,7 @@
           </div>
 
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Stock Actual del Negocio (En Unidades)</div>
+            <div class="p-4 border-b font-bold bg-gray-50">Stock Actual del Negocio</div>
             <table class="w-full text-left text-sm">
               <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
@@ -263,18 +254,17 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-4">
             <div>
               <h2 class="text-lg font-bold text-gray-800 mb-1">Caja Semanal Acumulada</h2>
-              <p class="text-xs text-gray-500">Separada por Monedas: Los Bolívares y Dólares cobrados ingresan por separado.</p>
+              <p class="text-xs text-gray-500">Separada por Monedas.</p>
             </div>
-            
             <button onclick="limpiarCajaSemanal()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 shadow">
-              <i class="fa-solid fa-broom"></i> Limpiar Caja Semanal (Reiniciar a 0)
+              <i class="fa-solid fa-broom"></i> Limpiar Caja Semanal
             </button>
           </div>
 
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 class="text-sm font-bold text-gray-700 mb-3">Inyección Manual de Dinero Extra (A la caja en USD)</h3>
+            <h3 class="text-sm font-bold text-gray-700 mb-3">Inyección Manual de Dinero Extra ($ USD)</h3>
             <form id="formCajaEntrada" class="flex gap-3 max-w-md">
-              <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo ($ USD)" required class="flex-1 border p-2.5 rounded-lg text-sm">
+              <input type="number" step="0.01" id="montoCajaManual" placeholder="Sumar dinero directo" required class="flex-1 border p-2.5 rounded-lg text-sm">
               <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-lg text-sm">
                 + Inyectar $
               </button>
@@ -300,7 +290,7 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-wrap justify-between items-center gap-3">
             <div>
               <h2 class="text-lg font-bold text-gray-800">Ventas Pagadas / Cobradas del Día</h2>
-              <p class="text-xs text-gray-500">Historial completo con indicador de moneda en la que pagó el cliente.</p>
+              <p class="text-xs text-gray-500">Historial completo con indicador de moneda.</p>
             </div>
             <button onclick="vaciarRegistroDia()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm">
               🗑️ Cerrar Cuentas de Hoy (Vaciar Historial)
@@ -365,7 +355,6 @@
         <div id="view-config" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
             <h2 class="text-lg font-bold text-gray-800">Gestión de Usuarios del Sistema</h2>
-
             <form id="formUsuario" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input type="text" id="newUsername" placeholder="Nuevo Usuario" required class="border p-2.5 rounded-lg text-sm">
               <input type="password" id="newPassword" placeholder="Contraseña" required class="border p-2.5 rounded-lg text-sm">
@@ -373,19 +362,10 @@
                 + Crear Usuario
               </button>
             </form>
-
             <div class="mt-4">
               <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Usuarios Registrados</h3>
               <ul id="listaUsuarios" class="divide-y border rounded-lg text-sm bg-gray-50"></ul>
             </div>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-lg font-bold text-gray-800 mb-2">Resetear Sistema</h2>
-            <p class="text-xs text-gray-500 mb-4">Elimina todos los datos guardados en el navegador y restaura los valores por defecto.</p>
-            <button onclick="if(confirm('¿Seguro que deseas formatear todo el sistema?')) { localStorage.clear(); location.reload(); }" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-xs">
-              ⚠️ Formatear / Resetear Sistema Completo
-            </button>
           </div>
         </div>
 
@@ -394,43 +374,87 @@
   </div>
 
   <script>
-    // OBTENER DÍA DE LA SEMANA
+    let tasaCambio = 840;
+    let inventario = [];
+    let cuentasHoy = [];
+    let cuentasPendientes = [];
+    let registroVentas = [];
+    let usuarios = [];
+    let currentUser = localStorage.getItem('smoothies_currentUser') || '';
+    let cajaEntradas = [];
+    let myChart = null;
+
     function getWeekdayIndex() {
       const d = new Date().getDay(); 
       if (d >= 1 && d <= 5) return d - 1;
-      return 1; // Por defecto Martes si se prueba en fin de semana
+      return 1;
     }
 
-    // ESTADO DE DATOS (LocalStorage)
-    let tasaCambio = parseFloat(localStorage.getItem('smoothies_tasa')) || 840;
-    let inventario = JSON.parse(localStorage.getItem('smoothies_inventario')) || [];
-    let cuentasHoy = JSON.parse(localStorage.getItem('smoothies_cuentasHoy')) || [];
-    let cuentasPendientes = JSON.parse(localStorage.getItem('smoothies_cuentasPendientes')) || [];
-    let registroVentas = JSON.parse(localStorage.getItem('smoothies_registroVentas')) || [];
-    let usuarios = JSON.parse(localStorage.getItem('smoothies_usuarios')) || [{ user: 'yhirwin', pass: 'Inc.123' }];
-    let currentUser = localStorage.getItem('smoothies_currentUser') || 'yhirwin';
+    // CARGAR Y AUTO-MIGRAR DATOS LOCALES AL SERVIDOR SI EXISTEN
+    async function loadState(callback) {
+      try {
+        const res = await fetch('/api/state');
+        const data = await res.json();
+        
+        // Si el servidor está vacío (ej: inventario vacío) pero hay datos viejos en el navegador local, los migramos automáticamente
+        const localInv = localStorage.getItem('smoothies_inventario');
+        if ((!data.inventario || data.inventario.length === 0) && localInv && JSON.parse(localInv).length > 0) {
+          console.log("Migrando datos locales antiguos al servidor...");
+          const migrarPayload = {
+            tasa: parseFloat(localStorage.getItem('smoothies_tasa') || 840),
+            inventario: JSON.parse(localStorage.getItem('smoothies_inventario') || '[]'),
+            cuentasHoy: JSON.parse(localStorage.getItem('smoothies_cuentasHoy') || '[]'),
+            cuentasPendientes: JSON.parse(localStorage.getItem('smoothies_cuentasPendientes') || '[]'),
+            registroVentas: JSON.parse(localStorage.getItem('smoothies_registroVentas') || '[]'),
+            usuarios: JSON.parse(localStorage.getItem('smoothies_usuarios') || '[{"user":"yhirwin","pass":"Inc.123"}]'),
+            cajaEntradas: JSON.parse(localStorage.getItem('smoothies_cajaEntradas') || '[]')
+          };
+          
+          await fetch('/api/state', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(migrarPayload)
+          });
+          
+          // Volver a consultar ya migrado
+          const res2 = await fetch('/api/state');
+          const data2 = await res2.json();
+          asignarDatos(data2);
+        } else {
+          asignarDatos(data);
+        }
 
-    // HORARIO Y CAJA
-    let cajaEntradas = JSON.parse(localStorage.getItem('smoothies_caja_5d'));
-    if (!cajaEntradas || cajaEntradas.length !== 5) {
-      cajaEntradas = [
-        { dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 },
-        { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 },
-        { dia: 'Mié', fecha: 'Miércoles', monto: 0, montoUSD: 0, montoBs: 0 },
-        { dia: 'Jue', fecha: 'Jueves', monto: 0, montoUSD: 0, montoBs: 0 },
-        { dia: 'Vie', fecha: 'Viernes', monto: 0, montoUSD: 0, montoBs: 0 }
-      ];
+        if (callback) callback();
+      } catch (e) {
+        console.error("Error sincronizando con el servidor", e);
+      }
     }
-    
-    // Migración automática de variables para cajas viejas
-    cajaEntradas.forEach(c => {
-       if(c.montoUSD === undefined) c.montoUSD = c.monto;
-       if(c.montoBs === undefined) c.montoBs = 0;
-    });
 
-    let myChart = null;
+    function asignarDatos(data) {
+      tasaCambio = data.tasa;
+      inventario = data.inventario;
+      cuentasHoy = data.cuentasHoy;
+      cuentasPendientes = data.cuentasPendientes;
+      registroVentas = data.registroVentas;
+      usuarios = data.usuarios;
+      cajaEntradas = data.cajaEntradas;
+    }
 
-    // FORMATEADORES MONEDA
+    // GUARDAR ESTADO EN EL SERVIDOR
+    async function saveData() {
+      const payload = { tasa: tasaCambio, inventario, cuentasHoy, cuentasPendientes, registroVentas, usuarios, cajaEntradas };
+      try {
+        await fetch('/api/state', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        renderAll();
+      } catch (e) {
+        console.error("Error al guardar datos", e);
+      }
+    }
+
     function toBs(montoUSD) {
       return (montoUSD * tasaCambio).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Bs.';
     }
@@ -468,9 +492,19 @@
       renderAll();
     }
 
-    if (localStorage.getItem('smoothies_auth') === 'true') showApp();
+    loadState(() => {
+      if (localStorage.getItem('smoothies_auth') === 'true') {
+        showApp();
+      }
+    });
 
-    // NAVEGACIÓN
+    // POLLING EN VIVO CADA 3 SEGUNDOS PARA SINCRONIZAR DISPOSITIVOS
+    setInterval(async () => {
+      if (localStorage.getItem('smoothies_auth') === 'true') {
+        await loadState(() => renderAll());
+      }
+    }, 3000);
+
     function nav(view) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('bg-terracotta', 'text-gray-300'));
@@ -478,17 +512,6 @@
       const activeBtn = document.getElementById(`nav-${view}`);
       if (activeBtn) activeBtn.classList.replace('text-gray-300', 'bg-terracotta');
       if (view === 'inicio') renderChart();
-    }
-
-    function saveData() {
-      localStorage.setItem('smoothies_tasa', tasaCambio);
-      localStorage.setItem('smoothies_inventario', JSON.stringify(inventario));
-      localStorage.setItem('smoothies_cuentasHoy', JSON.stringify(cuentasHoy));
-      localStorage.setItem('smoothies_cuentasPendientes', JSON.stringify(cuentasPendientes));
-      localStorage.setItem('smoothies_registroVentas', JSON.stringify(registroVentas));
-      localStorage.setItem('smoothies_caja_5d', JSON.stringify(cajaEntradas));
-      localStorage.setItem('smoothies_usuarios', JSON.stringify(usuarios));
-      renderAll();
     }
 
     function renderAll() {
@@ -504,14 +527,12 @@
       renderUsuarios();
     }
 
-    // TASA DE CAMBIO
     document.getElementById('formTasa').addEventListener('submit', (e) => {
       e.preventDefault();
       tasaCambio = parseFloat(document.getElementById('inputTasa').value) || 1;
       saveData();
     });
 
-    // ALERTAS STOCK BAJO (< 20)
     function renderStockAlerts() {
       const alertaBox = document.getElementById('alertaStockBajo');
       const textoAlerta = document.getElementById('textoAlertaStock');
@@ -525,7 +546,6 @@
       }
     }
 
-    // KPIS & CHARTS
     function renderKPIs() {
       const totalRegistroHoyUSD = registroVentas.filter(r => r.monedaCobrada !== 'BS').reduce((a, b) => a + (b.montoReal || b.montoTotal), 0);
       const totalRegistroHoyBS = registroVentas.filter(r => r.monedaCobrada === 'BS').reduce((a, b) => a + (b.montoReal || 0), 0);
@@ -536,12 +556,9 @@
 
       document.getElementById('kpi-ventas-hoy').innerText = `$${totalRegistroHoyUSD.toFixed(2)}`;
       document.getElementById('kpi-ventas-hoy-bs').innerText = `${totalRegistroHoyBS.toLocaleString('es-VE')} Bs.`;
-
       document.getElementById('kpi-cuentas-hoy').innerText = cuentasHoy.length;
-
       document.getElementById('kpi-pendientes').innerText = `$${totalDeudas.toFixed(2)}`;
       document.getElementById('kpi-pendientes-bs').innerText = toBs(totalDeudas);
-
       document.getElementById('kpi-caja').innerText = `$${totalCajaUSD.toFixed(2)}`;
       document.getElementById('kpi-caja-bs').innerText = `${totalCajaBs.toLocaleString('es-VE')} Bs.`;
     }
@@ -561,7 +578,6 @@
       });
     }
 
-    // INVENTARIO & CATEGORÍAS
     document.getElementById('formProducto').addEventListener('submit', (e) => {
       e.preventDefault();
       inventario.push({
@@ -595,7 +611,6 @@
       selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
     }
 
-    // CUENTAS DE HOY
     document.getElementById('formNuevaCuentaHoy').addEventListener('submit', (e) => {
       e.preventDefault();
       cuentasHoy.push({
@@ -629,18 +644,16 @@
               <h3 class="font-bold text-gray-800">${c.nombre}</h3>
               <button onclick="borrarCuenta(${c.id})" class="text-red-400 hover:text-red-600 font-bold text-xs"><i class="fa-solid fa-trash-can"></i> Cancelar Mesa</button>
             </div>
-
             <div class="my-3 border-t border-b py-2 space-y-1.5 min-h-[50px]">
               <p class="text-xs font-semibold text-gray-500 mb-1">Pedido en curso:</p>
               ${c.pedido.length === 0 ? '<p class="text-xs text-gray-400 italic">Sin productos añadidos</p>' :
                 c.pedido.map((item, idx) => `
                   <div class="text-[11px] flex justify-between items-center bg-gray-50 p-1.5 rounded border border-gray-200">
                     <span>${item.cant}x ${item.nombre} ($${(item.subUSD || item.precio * item.cant).toFixed(2)})</span>
-                    <button onclick="eliminarProdDeCuenta(${c.id}, ${idx})" class="text-red-500 font-bold px-1 py-0.5 rounded text-xs hover:bg-red-50" title="Quitar producto y devolver a inventario">✕</button>
+                    <button onclick="eliminarProdDeCuenta(${c.id}, ${idx})" class="text-red-500 font-bold px-1 py-0.5 rounded text-xs hover:bg-red-50">✕</button>
                   </div>
                 `).join('')}
             </div>
-
             <div class="flex gap-1 mt-2">
               <select id="selProd-${c.id}" class="text-xs border p-1 rounded w-1/3">
                 ${inventario.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('')}
@@ -654,21 +667,18 @@
               <button onclick="agregarProdACuenta(${c.id})" class="bg-navy text-white text-xs px-2 py-1 rounded font-bold">+ Add</button>
             </div>
           </div>
-
           <div>
             <div class="border-t pt-3 mt-4 flex flex-col items-end">
               <span class="text-xs text-gray-500">Monto Calculado:</span>
               <span class="text-lg font-bold text-terracotta">$${montoUSDFormat}</span>
               <span class="text-sm text-blue-700 font-bold">${montoBsFormat} Bs.</span>
             </div>
-
-            <!-- SECCIÓN DE FACTURACIÓN -->
             <div class="mt-3 flex gap-2 w-full pt-2 border-t border-dashed">
-              <select id="pagoMoneda-${c.id}" class="flex-1 text-xs border border-emerald-300 p-2 rounded bg-emerald-50 text-emerald-900 font-bold focus:ring-emerald-500">
+              <select id="pagoMoneda-${c.id}" class="flex-1 text-xs border border-emerald-300 p-2 rounded bg-emerald-50 text-emerald-900 font-bold">
                 <option value="USD">💵 Paga en Dólares ($${montoUSDFormat})</option>
                 <option value="BS">💳 Paga en Bs. (${montoBsFormat})</option>
               </select>
-              <button onclick="cobrarCuenta(${c.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-lg flex-1 shadow shadow-emerald-200">
+              <button onclick="cobrarCuenta(${c.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-lg flex-1 shadow">
                 Cobrar Mesa
               </button>
             </div>
@@ -677,17 +687,14 @@
       `}).join('');
     }
 
-    // LÓGICA DE AÑADIR PRODUCTO (SOPORTA PROMOCIONES)
     function agregarProdACuenta(cuentaId) {
       const prodId = parseInt(document.getElementById(`selProd-${cuentaId}`).value);
       const formato = document.getElementById(`selFormato-${cuentaId}`).value;
       const cantCombos = parseInt(document.getElementById(`cantProd-${cuentaId}`).value);
-      
       const prod = inventario.find(p => p.id === prodId);
       const cuenta = cuentasHoy.find(c => c.id === cuentaId);
 
       if (!prod) return;
-
       cuenta.montoTotalUSD = cuenta.montoTotalUSD || cuenta.montoTotal || 0;
       cuenta.montoTotalBs = cuenta.montoTotalBs || (cuenta.montoTotalUSD * tasaCambio);
 
@@ -712,19 +719,10 @@
       if (prod.stock < totalUnidades) return alert(`Stock insuficiente. Tienes ${prod.stock} y necesitas ${totalUnidades}.`);
 
       prod.stock -= totalUnidades;
-      
       const subUSD = precioUnidadUSD * cantCombos;
       const subBs = precioUnidadBs * cantCombos;
 
-      cuenta.pedido.push({ 
-        prodId: prod.id, 
-        nombre: descNombre, 
-        cant: cantCombos,
-        unidadesDescontadas: totalUnidades,
-        subUSD: subUSD,
-        subBs: subBs
-      });
-      
+      cuenta.pedido.push({ prodId: prod.id, nombre: descNombre, cant: cantCombos, unidadesDescontadas: totalUnidades, subUSD, subBs });
       cuenta.montoTotalUSD += subUSD;
       cuenta.montoTotalBs += subBs;
       cuenta.montoTotal = cuenta.montoTotalUSD;
@@ -732,21 +730,16 @@
       saveData();
     }
 
-    // ELIMINAR UN PRODUCTO Y DEVOLVER STOCK
     function eliminarProdDeCuenta(cuentaId, itemIdx) {
       const cuenta = cuentasHoy.find(c => c.id === cuentaId);
       if (!cuenta || !cuenta.pedido[itemIdx]) return;
 
       const item = cuenta.pedido[itemIdx];
       const prod = inventario.find(p => p.id === item.prodId);
-      
-      if (prod) {
-        prod.stock += (item.unidadesDescontadas || item.cant || 1); 
-      }
+      if (prod) prod.stock += (item.unidadesDescontadas || item.cant || 1);
 
-      cuenta.montoTotalUSD -= (item.subUSD || (item.precio * item.cant) || 0);
-      cuenta.montoTotalBs -= (item.subBs || (item.precio * item.cant * tasaCambio) || 0);
-      
+      cuenta.montoTotalUSD -= (item.subUSD || 0);
+      cuenta.montoTotalBs -= (item.subBs || 0);
       cuenta.montoTotalUSD = Math.max(0, cuenta.montoTotalUSD);
       cuenta.montoTotalBs = Math.max(0, cuenta.montoTotalBs);
       cuenta.montoTotal = cuenta.montoTotalUSD;
@@ -755,31 +748,25 @@
       saveData();
     }
 
-    // BORRAR CUENTA Y DEVOLVER TODO
     function borrarCuenta(cuentaId) {
       const cuenta = cuentasHoy.find(c => c.id === cuentaId);
       if (!cuenta) return;
-
-      if (confirm(`¿Borrar mesa "${cuenta.nombre}"? Todos los productos regresarán al inventario.`)) {
+      if (confirm(`¿Borrar mesa "${cuenta.nombre}"? Los productos regresarán al inventario.`)) {
         cuenta.pedido.forEach(item => {
           const prod = inventario.find(p => p.id === item.prodId);
-          if (prod) prod.stock += (item.unidadesDescontadas || item.cant || 1); 
+          if (prod) prod.stock += (item.unidadesDescontadas || item.cant || 1);
         });
         cuentasHoy = cuentasHoy.filter(c => c.id !== cuentaId);
         saveData();
       }
     }
 
-    // FACTURAR CUENTA (CIERRE Y COBRO)
     function cobrarCuenta(cuentaId) {
       const cuentaIndex = cuentasHoy.findIndex(c => c.id === cuentaId);
       if (cuentaIndex === -1) return;
       const c = cuentasHoy[cuentaIndex];
-      
       const monedaSeleccionada = document.getElementById(`pagoMoneda-${cuentaId}`).value;
-      const nombreMoneda = monedaSeleccionada === 'USD' ? 'Dólares' : 'Bolívares';
-      
-      if (!confirm(`¿Confirmar cobro de "${c.nombre}" en ${nombreMoneda}?`)) return;
+      if (!confirm(`¿Confirmar cobro de "${c.nombre}"?`)) return;
 
       const montoCobradoFinal = monedaSeleccionada === 'USD' ? c.montoTotalUSD : c.montoTotalBs;
 
@@ -805,7 +792,6 @@
       saveData();
     }
 
-    // DEUDAS (CUENTAS PENDIENTES)
     document.getElementById('formNuevaDeuda').addEventListener('submit', (e) => {
       e.preventDefault();
       const deudor = document.getElementById('deudorNombre').value.trim();
@@ -835,94 +821,54 @@
             <td class="p-3 text-gray-500">${p.concepto}</td>
             <td class="p-3 font-bold text-amber-600">${fmtDual(p.monto)}</td>
             <td class="p-3 text-right flex gap-2 justify-end">
-              <button onclick="abonarDeuda(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
-                Pagar Monto
-              </button>
-              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow">
-                Saldar Total
-              </button>
+              <button onclick="abonarDeuda(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Pagar Monto</button>
+              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Saldar Total</button>
             </td>
           </tr>
         `).join('');
     }
 
-    // NUEVA FUNCIÓN: PAGAR OTRO MONTO / ABONO PARCIAL
     function abonarDeuda(id) {
       const p = cuentasPendientes.find(x => x.id === id);
       if (!p) return;
-
-      const montoStr = prompt(`Deuda actual de ${p.deudor}: $${p.monto.toFixed(2)}\nIngrese el monto que desea pagar ($ USD):`, p.monto.toFixed(2));
-      if (montoStr === null) return; // Si cancela
-
+      const montoStr = prompt(`Deuda actual: $${p.monto.toFixed(2)}\nIngrese el monto a abonar ($ USD):`, p.monto.toFixed(2));
+      if (montoStr === null) return;
       const montoPago = parseFloat(montoStr);
-      if (isNaN(montoPago) || montoPago <= 0) {
-        alert('Por favor, ingrese un monto válido.');
-        return;
-      }
-
-      if (montoPago > p.monto) {
-        if (!confirm(`El monto ingresado ($${montoPago.toFixed(2)}) es mayor que la deuda actual ($${p.monto.toFixed(2)}). ¿Desea saldar la deuda por completo?`)) {
-          return;
-        }
-      }
+      if (isNaN(montoPago) || montoPago <= 0) return alert('Monto inválido.');
 
       const montoRealAbono = Math.min(montoPago, p.monto);
-
-      // Registrar en ventas/caja
-      registroVentas.push({ 
-        id: Date.now(), 
-        hora: new Date().toLocaleTimeString(), 
-        nombre: `Abono Deuda (${p.deudor})`, 
-        pedido: p.concepto, 
-        montoTotal: montoRealAbono, 
-        monedaCobrada: 'USD', 
-        montoReal: montoRealAbono 
-      });
+      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Abono Deuda (${p.deudor})`, pedido: p.concepto, montoTotal: montoRealAbono, monedaCobrada: 'USD', montoReal: montoRealAbono });
 
       const dayIdx = getWeekdayIndex();
       cajaEntradas[dayIdx].monto += montoRealAbono;
       cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + montoRealAbono;
-
-      // Descontar del saldo pendiente
       p.monto -= montoRealAbono;
 
-      // Si la deuda se paga por completo o queda en 0, eliminar de la lista
-      if (p.monto <= 0.001) {
-        cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
-      }
-
+      if (p.monto <= 0.001) cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
       saveData();
     }
 
     function saldarDeuda(id) {
       const p = cuentasPendientes.find(x => x.id === id);
       if (!p) return;
+      if (!confirm(`¿Cobrar deuda total de $${p.monto.toFixed(2)}?`)) return;
 
-      if (!confirm(`¿Cobrar la deuda total de $${p.monto.toFixed(2)} a ${p.deudor}?`)) return;
-
-      registroVentas.push({ 
-        id: Date.now(), hora: new Date().toLocaleTimeString(), 
-        nombre: `Cobro Total Deuda (${p.deudor})`, pedido: p.concepto, 
-        montoTotal: p.monto, monedaCobrada: 'USD', montoReal: p.monto 
-      });
+      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Cobro Total Deuda (${p.deudor})`, pedido: p.concepto, montoTotal: p.monto, monedaCobrada: 'USD', montoReal: p.monto });
 
       const dayIdx = getWeekdayIndex();
       cajaEntradas[dayIdx].monto += p.monto;
       cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + p.monto;
-
       cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
       saveData();
     }
 
-    // REGISTRO DEL DÍA
     function renderRegistro() {
       const tbody = document.getElementById('tablaRegistro');
       tbody.innerHTML = registroVentas.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">No hay ventas registradas hoy.</td></tr>' :
         registroVentas.slice().reverse().map(r => {
           let esBs = r.monedaCobrada === 'BS';
-          let badge = esBs ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-[10px] font-bold">Tarjeta/PagoMóvil Bs.</span>' : '<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-[10px] font-bold">Efectivo/Zelle $</span>';
+          let badge = esBs ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-[10px] font-bold">Bs.</span>' : '<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-[10px] font-bold">$</span>';
           let txtMonto = esBs ? `${(r.montoReal || 0).toLocaleString('es-VE')} Bs.` : `$${(r.montoReal || r.montoTotal || 0).toFixed(2)}`;
-          
           return `
           <tr>
             <td class="p-3 text-gray-500 text-xs">${r.hora}</td>
@@ -934,13 +880,12 @@
     }
 
     function vaciarRegistroDia() {
-      if (confirm('¿Cerrar las ventas registradas de hoy? El dinero acumulado se mantendrá guardado en la Caja Semanal.')) {
+      if (confirm('¿Cerrar ventas de hoy?')) {
         registroVentas = [];
         saveData();
       }
     }
 
-    // CAJA SEMANAL E INYECCIÓN MANUAL
     document.getElementById('formCajaEntrada').addEventListener('submit', (e) => {
       e.preventDefault();
       const montoInput = parseFloat(document.getElementById('montoCajaManual').value);
@@ -952,7 +897,7 @@
     });
 
     function limpiarCajaSemanal() {
-      if (confirm('¿Reiniciar TODA la Caja Semanal (Lunes a Viernes) a 0?')) {
+      if (confirm('¿Reiniciar Caja Semanal?')) {
         cajaEntradas = [
           { dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 },
           { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 },
@@ -977,40 +922,32 @@
       `).join('');
     }
 
-    // INFORMES GLOBALES
     function renderInformes() {
       const totalValorInv = inventario.reduce((a, b) => a + (b.precio * b.stock), 0);
       const totalDeudas = cuentasPendientes.reduce((a, b) => a + b.monto, 0);
-      
       const totalRegistroHoyUSD = registroVentas.filter(r => r.monedaCobrada !== 'BS').reduce((a, b) => a + (b.montoReal || b.montoTotal), 0);
       const totalRegistroHoyBS = registroVentas.filter(r => r.monedaCobrada === 'BS').reduce((a, b) => a + (b.montoReal || 0), 0);
 
       document.getElementById('inf-valor-inv').innerText = `$${totalValorInv.toFixed(2)}`;
       document.getElementById('inf-valor-inv-bs').innerText = toBs(totalValorInv);
-
       document.getElementById('inf-deudas').innerText = `$${totalDeudas.toFixed(2)}`;
       document.getElementById('inf-deudas-bs').innerText = toBs(totalDeudas);
-
       document.getElementById('inf-caja').innerText = `$${totalRegistroHoyUSD.toFixed(2)}`;
       document.getElementById('inf-caja-bs').innerText = `${totalRegistroHoyBS.toLocaleString('es-VE')} Bs.`;
 
-      const tbody = document.getElementById('tablaInformesStock');
-      tbody.innerHTML = inventario.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin productos.</td></tr>' :
+      document.getElementById('tablaInformesStock').innerHTML = inventario.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin productos.</td></tr>' :
         inventario.map(p => `
           <tr>
             <td class="p-3 font-semibold">${p.nombre}</td>
             <td class="p-3 text-gray-500">${p.categoria}</td>
             <td class="p-3 font-bold">${p.stock} unids.</td>
             <td class="p-3">
-              ${p.stock < 20 ? 
-                '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Bajo</span>' : 
-                '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
+              ${p.stock < 20 ? '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Bajo</span>' : '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
             </td>
           </tr>
         `).join('');
     }
 
-    // USUARIOS
     document.getElementById('formUsuario').addEventListener('submit', (e) => {
       e.preventDefault();
       const u = document.getElementById('newUsername').value.trim();
