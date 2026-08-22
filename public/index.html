@@ -7,15 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { terracotta: '#c84b23', navy: '#1E293B' }
-        }
-      }
-    }
-  </script>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; }
     .hidden { display: none !important; }
@@ -28,23 +19,23 @@
 <body class="text-gray-800">
 
   <!-- PANTALLA DE LOGIN -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center bg-navy p-4">
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center bg-slate-900 p-4">
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
       <div class="text-center mb-6">
-        <h1 class="text-3xl font-bold text-terracotta mb-1">Smoothies</h1>
+        <h1 class="text-3xl font-bold text-[#c84b23] mb-1">Smoothies</h1>
         <p class="text-gray-500 text-sm">Sistema de Gestión y Ventas</p>
       </div>
       <form id="loginForm" class="space-y-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
-          <input type="text" id="username" required class="w-full border-2 border-gray-200 p-3 rounded-xl focus:border-terracotta focus:ring-0 outline-none transition">
+          <input type="text" id="username" required class="w-full border-2 border-gray-200 p-3 rounded-xl outline-none transition">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-          <input type="password" id="password" required class="w-full border-2 border-gray-200 p-3 rounded-xl focus:border-terracotta focus:ring-0 outline-none transition">
+          <input type="password" id="password" required class="w-full border-2 border-gray-200 p-3 rounded-xl outline-none transition">
         </div>
         <p id="loginError" class="text-red-500 text-sm font-bold hidden text-center">Credenciales incorrectas.</p>
-        <button type="submit" class="w-full bg-terracotta hover:bg-orange-700 text-white font-bold p-3 rounded-xl transition shadow-lg">Entrar al Sistema</button>
+        <button type="submit" class="w-full bg-[#c84b23] hover:bg-orange-700 text-white font-bold p-3 rounded-xl transition shadow-lg">Entrar al Sistema</button>
       </form>
     </div>
   </div>
@@ -53,13 +44,13 @@
   <div id="appScreen" class="hidden min-h-screen flex flex-col md:flex-row">
     
     <!-- BARRA LATERAL (MENÚ) -->
-    <nav class="bg-navy w-full md:w-64 flex-shrink-0 shadow-xl flex flex-col md:min-h-screen">
+    <nav class="bg-slate-900 w-full md:w-64 flex-shrink-0 shadow-xl flex flex-col md:min-h-screen">
       <div class="p-6 text-center border-b border-gray-700">
         <h2 class="text-2xl font-black text-white tracking-wide">SMOOTHIES</h2>
-        <p class="text-terracotta text-xs font-bold mt-1 uppercase" id="currentUserName"></p>
+        <p class="text-[#c84b23] text-xs font-bold mt-1 uppercase" id="currentUserName"></p>
       </div>
       <div class="flex-1 px-4 py-6 space-y-2 flex flex-row md:flex-col overflow-x-auto md:overflow-visible">
-        <button id="nav-inicio" onclick="nav('inicio')" class="nav-btn flex items-center gap-3 w-full text-left p-3 rounded-lg font-medium bg-terracotta text-white transition"><i class="fa-solid fa-house w-5"></i> <span class="hidden md:inline">Inicio</span></button>
+        <button id="nav-inicio" onclick="nav('inicio')" class="nav-btn flex items-center gap-3 w-full text-left p-3 rounded-lg font-medium bg-[#c84b23] text-white transition"><i class="fa-solid fa-house w-5"></i> <span class="hidden md:inline">Inicio</span></button>
         <button id="nav-inventario" onclick="nav('inventario')" class="nav-btn flex items-center gap-3 w-full text-left p-3 rounded-lg font-medium text-gray-300 hover:bg-gray-800 transition"><i class="fa-solid fa-box w-5"></i> <span class="hidden md:inline">Inventario</span></button>
         <button id="nav-cuentas" onclick="nav('cuentas')" class="nav-btn flex items-center gap-3 w-full text-left p-3 rounded-lg font-medium text-gray-300 hover:bg-gray-800 transition"><i class="fa-solid fa-users w-5"></i> <span class="hidden md:inline">Cuentas y Deudas</span></button>
         <button id="nav-registro" onclick="nav('registro')" class="nav-btn flex items-center gap-3 w-full text-left p-3 rounded-lg font-medium text-gray-300 hover:bg-gray-800 transition"><i class="fa-solid fa-list-check w-5"></i> <span class="hidden md:inline">Registro Ventas</span></button>
@@ -80,10 +71,10 @@
           <p class="text-sm text-gray-500 font-medium" id="fechaActual"></p>
         </div>
         <div class="flex items-center gap-4">
-          <form id="formTasa" class="flex items-center bg-gray-100 p-1.5 rounded-lg border">
+          <form id="formTasa" class="flex items-center bg-gray-100 p-1.5 rounded-lg border border-gray-300">
             <span class="text-sm font-bold text-gray-600 px-2">Tasa:</span>
-            <input type="number" step="0.01" id="inputTasa" class="w-20 p-1 text-sm border rounded outline-none font-bold text-terracotta text-right">
-            <button type="submit" class="ml-2 bg-navy text-white text-xs px-2 py-1 rounded hover:bg-gray-800">OK</button>
+            <input type="number" step="0.01" id="inputTasa" class="w-20 p-1 text-sm border rounded outline-none font-bold text-[#c84b23] text-right">
+            <button type="submit" class="ml-2 bg-slate-800 text-white text-xs px-2 py-1 rounded hover:bg-slate-900">OK</button>
           </form>
           <div class="bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-lg">
              <span class="text-sm font-bold text-blue-800" id="displayTasa"></span>
@@ -96,7 +87,7 @@
         
         <!-- VISTA: INICIO -->
         <div id="view-inicio" class="view-panel space-y-6">
-          <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Resumen General</h2>
+          <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Resumen General</h2>
           
           <div id="alertaStockBajo" class="hidden bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm">
             <div class="flex">
@@ -109,57 +100,57 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-5 rounded-xl shadow border border-gray-100 flex flex-col justify-center items-center text-center">
+            <div class="bg-white p-5 rounded-xl shadow border border-gray-200 flex flex-col justify-center items-center text-center">
               <p class="text-gray-500 text-sm font-semibold mb-1">Ventas Hoy (USD)</p>
               <h3 class="text-3xl font-black text-emerald-600" id="kpi-ventas-hoy">$0.00</h3>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow border border-gray-100 flex flex-col justify-center items-center text-center">
+            <div class="bg-white p-5 rounded-xl shadow border border-gray-200 flex flex-col justify-center items-center text-center">
               <p class="text-gray-500 text-sm font-semibold mb-1">Ventas Hoy (Bs)</p>
               <h3 class="text-xl font-bold text-blue-700" id="kpi-ventas-hoy-bs">0 Bs.</h3>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow border border-gray-100 flex flex-col justify-center items-center text-center">
+            <div class="bg-white p-5 rounded-xl shadow border border-gray-200 flex flex-col justify-center items-center text-center">
               <p class="text-gray-500 text-sm font-semibold mb-1">Cuentas/Mesas Activas</p>
               <h3 class="text-3xl font-black text-amber-500" id="kpi-cuentas-hoy">0</h3>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow border border-gray-100 flex flex-col justify-center items-center text-center">
+            <div class="bg-white p-5 rounded-xl shadow border border-gray-200 flex flex-col justify-center items-center text-center">
               <p class="text-gray-500 text-sm font-semibold mb-1">Deuda Total Pendiente</p>
               <h3 class="text-2xl font-bold text-red-500" id="kpi-pendientes">$0.00</h3>
               <p class="text-xs text-gray-400 mt-1" id="kpi-pendientes-bs">0 Bs.</p>
             </div>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-chart-line text-terracotta mr-2"></i> Flujo de Caja (Semana Actual)</h3>
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+            <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-chart-line text-[#c84b23] mr-2"></i> Flujo de Caja (Semana Actual)</h3>
             <div class="h-64 w-full"><canvas id="graficaCaja"></canvas></div>
           </div>
         </div>
 
         <!-- VISTA: INVENTARIO -->
         <div id="view-inventario" class="view-panel hidden space-y-6">
-          <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Gestión de Inventario</h2>
+          <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Gestión de Inventario</h2>
           
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-plus-circle text-terracotta mr-2"></i> Registrar Nuevo Producto</h3>
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-plus-circle text-[#c84b23] mr-2"></i> Registrar Nuevo Producto</h3>
             <form id="formProducto" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <input type="text" id="prodNombre" placeholder="Nombre (ej. Polar Tercio)" required class="md:col-span-2 p-2 border rounded focus:ring-2 focus:ring-terracotta outline-none">
-              <input type="text" id="prodCategoria" placeholder="Categoría" list="listCategorias" required class="p-2 border rounded focus:ring-2 focus:ring-terracotta outline-none">
+              <input type="text" id="prodNombre" placeholder="Nombre (ej. Polar Tercio)" required class="md:col-span-2 p-2 border border-gray-300 rounded outline-none">
+              <input type="text" id="prodCategoria" placeholder="Categoría" list="listCategorias" required class="p-2 border border-gray-300 rounded outline-none">
               <datalist id="listCategorias"></datalist>
-              <input type="number" id="prodPrecio" placeholder="Precio ($ USD)" step="0.01" required class="p-2 border rounded focus:ring-2 focus:ring-terracotta outline-none">
-              <input type="number" id="prodStock" placeholder="Stock Inicial" required class="p-2 border rounded focus:ring-2 focus:ring-terracotta outline-none">
-              <button type="submit" class="md:col-span-5 bg-navy hover:bg-gray-800 text-white font-bold p-2 rounded transition">Guardar Producto</button>
+              <input type="number" id="prodPrecio" placeholder="Precio ($ USD)" step="0.01" required class="p-2 border border-gray-300 rounded outline-none">
+              <input type="number" id="prodStock" placeholder="Stock Inicial" required class="p-2 border border-gray-300 rounded outline-none">
+              <button type="submit" class="md:col-span-5 bg-slate-900 hover:bg-slate-800 text-white font-bold p-2 rounded transition">Guardar Producto</button>
             </form>
           </div>
 
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-gray-800"><i class="fa-solid fa-boxes-stacked text-terracotta mr-2"></i> Catálogo Actual</h3>
-              <select id="filtroCategoriaInv" onchange="renderInventario()" class="p-2 border rounded text-sm outline-none bg-gray-50"></select>
+              <h3 class="font-bold text-gray-800"><i class="fa-solid fa-boxes-stacked text-[#c84b23] mr-2"></i> Catálogo Actual</h3>
+              <select id="filtroCategoriaInv" onchange="renderInventario()" class="p-2 border border-gray-300 rounded text-sm outline-none bg-gray-50"></select>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr><th class="p-3 rounded-tl-lg">Producto</th><th class="p-3">Categoría</th><th class="p-3">Precio USD</th><th class="p-3">Stock</th><th class="p-3 text-right rounded-tr-lg">Acciones</th></tr>
+                <thead class="bg-gray-100 text-gray-700">
+                  <tr><th class="p-3 rounded-tl-lg border-b">Producto</th><th class="p-3 border-b">Categoría</th><th class="p-3 border-b">Precio USD</th><th class="p-3 border-b">Stock</th><th class="p-3 text-right rounded-tr-lg border-b">Acciones</th></tr>
                 </thead>
-                <tbody id="tablaInventario" class="divide-y divide-gray-100"></tbody>
+                <tbody id="tablaInventario" class="divide-y divide-gray-200"></tbody>
               </table>
             </div>
           </div>
@@ -167,14 +158,13 @@
 
         <!-- VISTA: CUENTAS Y DEUDAS -->
         <div id="view-cuentas" class="view-panel hidden space-y-6">
-          <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Cuentas y Deudas</h2>
+          <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Cuentas y Deudas</h2>
           
-          <!-- SECCIÓN MESAS / CUENTAS DE HOY -->
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-bell-concierge text-terracotta mr-2"></i> Abrir Nueva Cuenta / Mesa</h3>
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-bell-concierge text-[#c84b23] mr-2"></i> Abrir Nueva Cuenta / Mesa</h3>
             <form id="formNuevaCuentaHoy" class="flex gap-4">
-              <input type="text" id="nombreMesa" placeholder="Ej. Mesa 1, Barra, o Nombre Cliente" required class="flex-1 p-2 border rounded focus:ring-2 focus:ring-terracotta outline-none">
-              <button type="submit" class="bg-navy hover:bg-gray-800 text-white font-bold px-6 py-2 rounded transition">Abrir Cuenta</button>
+              <input type="text" id="nombreMesa" placeholder="Ej. Mesa 1, Barra, o Nombre Cliente" required class="flex-1 p-2 border border-gray-300 rounded outline-none">
+              <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2 rounded transition">Abrir Cuenta</button>
             </form>
           </div>
           <div id="gridCuentasHoy" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -183,25 +173,24 @@
 
           <hr class="border-gray-300 my-8">
 
-          <!-- SECCIÓN DEUDORES FIADOS -->
-          <h3 class="text-xl font-bold text-navy"><i class="fa-solid fa-book-open text-terracotta mr-2"></i> Libro de Deudores (Fiado)</h3>
+          <h3 class="text-xl font-bold text-slate-900"><i class="fa-solid fa-book-open text-[#c84b23] mr-2"></i> Libro de Deudores (Fiado)</h3>
           
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
             <h4 class="font-bold text-gray-700 text-sm mb-3">Registrar Nueva Deuda</h4>
             <form id="formNuevaDeuda" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <input type="text" id="deudorNombre" placeholder="Nombre de la persona" required class="p-2 border rounded outline-none">
-              <select id="deudorProducto" required class="p-2 border rounded outline-none"></select>
-              <input type="number" id="deudorCant" placeholder="Cantidad" min="1" value="1" required class="p-2 border rounded outline-none">
+              <input type="text" id="deudorNombre" placeholder="Nombre de la persona" required class="p-2 border border-gray-300 rounded outline-none">
+              <select id="deudorProducto" required class="p-2 border border-gray-300 rounded outline-none"></select>
+              <input type="number" id="deudorCant" placeholder="Cantidad" min="1" value="1" required class="p-2 border border-gray-300 rounded outline-none">
               <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold p-2 rounded transition shadow">Anotar en Libro</button>
             </form>
           </div>
 
-          <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
-            <div class="bg-gray-100 p-4 border-b flex justify-between items-center">
-              <h4 class="font-bold text-gray-700">Deudas Activas</h4>
-              <input type="text" id="filtroDeudor" placeholder="Buscar deudor..." onkeyup="renderCuentasPendientes()" class="p-1.5 px-3 text-sm border rounded outline-none w-48">
+          <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+            <div class="bg-gray-100 p-4 border-b border-gray-300 flex justify-between items-center">
+              <h4 class="font-bold text-gray-800">Deudas Activas</h4>
+              <input type="text" id="filtroDeudor" placeholder="Buscar deudor..." onkeyup="renderCuentasPendientes()" class="p-1.5 px-3 text-sm border border-gray-300 rounded outline-none w-48">
             </div>
-            <div id="listaDeudoresAgrupados" class="divide-y divide-gray-100">
+            <div id="listaDeudoresAgrupados" class="divide-y divide-gray-200">
               <!-- Render dinámico deudas -->
             </div>
           </div>
@@ -210,16 +199,16 @@
         <!-- VISTA: REGISTRO -->
         <div id="view-registro" class="view-panel hidden space-y-6">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Registro de Ventas (Hoy)</h2>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Registro de Ventas (Hoy)</h2>
             <button onclick="vaciarRegistroDia()" class="bg-red-500 hover:bg-red-600 text-white text-sm font-bold px-4 py-2 rounded shadow transition"><i class="fa-solid fa-broom mr-1"></i> Cerrar Día (Limpiar Registro)</button>
           </div>
-          <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+          <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr><th class="p-3">Hora</th><th class="p-3">Cuenta/Cliente</th><th class="p-3">Pedido</th><th class="p-3">Monto Pagado</th></tr>
+                <thead class="bg-gray-100 text-gray-700">
+                  <tr><th class="p-3 border-b">Hora</th><th class="p-3 border-b">Cuenta/Cliente</th><th class="p-3 border-b">Pedido</th><th class="p-3 border-b">Monto Pagado</th></tr>
                 </thead>
-                <tbody id="tablaRegistro" class="divide-y divide-gray-100"></tbody>
+                <tbody id="tablaRegistro" class="divide-y divide-gray-200"></tbody>
               </table>
             </div>
           </div>
@@ -228,25 +217,25 @@
         <!-- VISTA: CAJA -->
         <div id="view-caja" class="view-panel hidden space-y-6">
           <div class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Caja Semanal</h2>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Caja Semanal</h2>
             <button onclick="limpiarCajaSemanal()" class="text-red-500 font-bold text-sm hover:underline"><i class="fa-solid fa-rotate-left"></i> Reiniciar Semana</button>
           </div>
           
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100">
-            <h3 class="font-bold text-gray-700 text-sm mb-3">Agregar Ingreso Manual a Caja (USD)</h3>
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+            <h3 class="font-bold text-gray-800 text-sm mb-3">Agregar Ingreso Manual a Caja (USD)</h3>
             <form id="formCajaEntrada" class="flex gap-4 max-w-md">
-              <input type="number" id="montoCajaManual" placeholder="Monto en $" step="0.01" required class="flex-1 p-2 border rounded outline-none">
+              <input type="number" id="montoCajaManual" placeholder="Monto en $" step="0.01" required class="flex-1 p-2 border border-gray-300 rounded outline-none">
               <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded">Añadir</button>
             </form>
           </div>
 
-          <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+          <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm whitespace-nowrap">
-                <thead class="bg-gray-100 text-gray-600">
-                  <tr><th class="p-3">Día</th><th class="p-3">Fecha</th><th class="p-3">Ingresos Totales Registrados</th></tr>
+                <thead class="bg-gray-100 text-gray-700">
+                  <tr><th class="p-3 border-b">Día</th><th class="p-3 border-b">Fecha</th><th class="p-3 border-b">Ingresos Totales Registrados</th></tr>
                 </thead>
-                <tbody id="tablaCajaDiaria" class="divide-y divide-gray-100"></tbody>
+                <tbody id="tablaCajaDiaria" class="divide-y divide-gray-200"></tbody>
               </table>
             </div>
           </div>
@@ -254,7 +243,7 @@
 
         <!-- VISTA: INFORMES -->
         <div id="view-informes" class="view-panel hidden space-y-6">
-          <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Informes Financieros</h2>
+          <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Informes Financieros</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-emerald-500">
               <p class="text-sm text-gray-500 font-bold uppercase mb-2">Valor Total del Inventario</p>
@@ -266,21 +255,21 @@
               <h3 class="text-3xl font-black text-amber-500" id="inf-deudas">$0.00</h3>
               <p class="text-sm font-bold text-blue-700 mt-1" id="inf-deudas-bs">0 Bs.</p>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-terracotta">
+            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-[#c84b23]">
               <p class="text-sm text-gray-500 font-bold uppercase mb-2">Total Caja Fuerte Hoy</p>
-              <h3 class="text-3xl font-black text-terracotta" id="inf-caja">$0.00</h3>
+              <h3 class="text-3xl font-black text-[#c84b23]" id="inf-caja">$0.00</h3>
               <p class="text-sm font-bold text-blue-700 mt-1" id="inf-caja-bs">0 Bs.</p>
             </div>
           </div>
           
-          <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mt-6">
-            <div class="bg-gray-100 p-4 border-b"><h4 class="font-bold text-gray-700">Informe Rápido de Stock</h4></div>
+          <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden mt-6">
+            <div class="bg-gray-100 p-4 border-b border-gray-300"><h4 class="font-bold text-gray-800">Informe Rápido de Stock</h4></div>
             <div class="overflow-x-auto max-h-96">
               <table class="w-full text-left text-sm whitespace-nowrap">
-                <thead class="bg-white sticky top-0 shadow-sm text-gray-600">
-                  <tr><th class="p-3">Producto</th><th class="p-3">Categoría</th><th class="p-3">Unidades Restantes</th><th class="p-3">Estado</th></tr>
+                <thead class="bg-white sticky top-0 shadow-sm text-gray-700">
+                  <tr><th class="p-3 border-b">Producto</th><th class="p-3 border-b">Categoría</th><th class="p-3 border-b">Unidades Restantes</th><th class="p-3 border-b">Estado</th></tr>
                 </thead>
-                <tbody id="tablaInformesStock" class="divide-y divide-gray-100"></tbody>
+                <tbody id="tablaInformesStock" class="divide-y divide-gray-200"></tbody>
               </table>
             </div>
           </div>
@@ -288,16 +277,16 @@
 
         <!-- VISTA: CONFIGURACIÓN -->
         <div id="view-config" class="view-panel hidden space-y-6">
-          <h2 class="text-2xl font-bold text-navy border-b-2 border-terracotta inline-block pb-1">Configuración del Sistema</h2>
-          <div class="bg-white p-6 rounded-xl shadow border border-gray-100 max-w-md">
-            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-users-gear text-terracotta mr-2"></i> Gestión de Usuarios</h3>
+          <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-[#c84b23] inline-block pb-1">Configuración del Sistema</h2>
+          <div class="bg-white p-6 rounded-xl shadow border border-gray-200 max-w-md">
+            <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-users-gear text-[#c84b23] mr-2"></i> Gestión de Usuarios</h3>
             <form id="formUsuario" class="space-y-3 mb-6">
-              <input type="text" id="newUsername" placeholder="Nuevo Usuario" required class="w-full p-2 border rounded outline-none">
-              <input type="password" id="newPassword" placeholder="Contraseña" required class="w-full p-2 border rounded outline-none">
-              <button type="submit" class="w-full bg-navy hover:bg-gray-800 text-white font-bold p-2 rounded transition">Crear Usuario</button>
+              <input type="text" id="newUsername" placeholder="Nuevo Usuario" required class="w-full p-2 border border-gray-300 rounded outline-none">
+              <input type="password" id="newPassword" placeholder="Contraseña" required class="w-full p-2 border border-gray-300 rounded outline-none">
+              <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold p-2 rounded transition">Crear Usuario</button>
             </form>
-            <h4 class="font-bold text-sm text-gray-600 mb-2 border-b pb-1">Usuarios Activos:</h4>
-            <ul id="listaUsuarios" class="divide-y divide-gray-100"></ul>
+            <h4 class="font-bold text-sm text-gray-800 mb-2 border-b border-gray-200 pb-1">Usuarios Activos:</h4>
+            <ul id="listaUsuarios" class="divide-y divide-gray-200"></ul>
           </div>
         </div>
 
@@ -305,7 +294,6 @@
     </main>
   </div>
 
-  <!-- SCRIPT LÓGICO ROBUSTO Y AUTÓNOMO (REEMPLAZADO) -->
   <script>
     let tasaCambio = 840;
     let inventario = [];
@@ -323,48 +311,75 @@
       return 1;
     }
 
-    // --- NUEVA LÓGICA ROBUSTA DE CARGA DE DATOS ---
-    async function loadState(callback) {
-      try {
-        if (localStorage.getItem('smoothies_tasa')) tasaCambio = parseFloat(localStorage.getItem('smoothies_tasa'));
-        if (localStorage.getItem('smoothies_inventario')) inventario = JSON.parse(localStorage.getItem('smoothies_inventario'));
-        if (localStorage.getItem('smoothies_cuentasHoy')) cuentasHoy = JSON.parse(localStorage.getItem('smoothies_cuentasHoy'));
-        if (localStorage.getItem('smoothies_cuentasPendientes')) cuentasPendientes = JSON.parse(localStorage.getItem('smoothies_cuentasPendientes'));
-        if (localStorage.getItem('smoothies_registroVentas')) registroVentas = JSON.parse(localStorage.getItem('smoothies_registroVentas'));
-        if (localStorage.getItem('smoothies_usuarios')) usuarios = JSON.parse(localStorage.getItem('smoothies_usuarios'));
-        if (localStorage.getItem('smoothies_cajaEntradas')) cajaEntradas = JSON.parse(localStorage.getItem('smoothies_cajaEntradas'));
-        
-        if (usuarios.length === 0) usuarios = [{user:"yhirwin", pass:"Inc.123"}];
-        if (cajaEntradas.length === 0) cajaEntradas = [
-          { dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 },
-          { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 },
-          { dia: 'Mié', fecha: 'Miércoles', monto: 0, montoUSD: 0, montoBs: 0 },
-          { dia: 'Jue', fecha: 'Jueves', monto: 0, montoUSD: 0, montoBs: 0 },
-          { dia: 'Vie', fecha: 'Viernes', monto: 0, montoUSD: 0, montoBs: 0 }
-        ];
-      } catch (e) { console.error("Error LocalStorage", e); }
+    function generarCajaBase() {
+      return [
+        { dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Mié', fecha: 'Miércoles', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Jue', fecha: 'Jueves', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Vie', fecha: 'Viernes', monto: 0, montoUSD: 0, montoBs: 0 }
+      ];
+    }
 
-      // Intento silencioso de sincronizar si existe un server.js (no detiene la app si falla)
+    // --- SINCRONIZADOR INTELIGENTE (Migración de Tomas a Yhirwin) ---
+    async function loadState(callback) {
+      // 1. Recopilamos qué hay guardado en la PC actual
+      let localInv = JSON.parse(localStorage.getItem('smoothies_inventario') || '[]');
+      let localHoy = JSON.parse(localStorage.getItem('smoothies_cuentasHoy') || '[]');
+      let localPend = JSON.parse(localStorage.getItem('smoothies_cuentasPendientes') || '[]');
+      let localReg = JSON.parse(localStorage.getItem('smoothies_registroVentas') || '[]');
+      let localUsu = JSON.parse(localStorage.getItem('smoothies_usuarios') || '[]');
+      let localCaja = JSON.parse(localStorage.getItem('smoothies_cajaEntradas') || '[]');
+      let localTasa = parseFloat(localStorage.getItem('smoothies_tasa') || '840');
+
+      let cantidadDatosLocales = localInv.length + localHoy.length + localPend.length + localReg.length;
+
+      // 2. Revisamos qué tiene el servidor central
+      let serverData = null;
       try {
         const res = await fetch('/api/state');
-        if (res.ok) {
-          const data = await res.json();
-          if(data.tasa) tasaCambio = data.tasa;
-          if(data.inventario && data.inventario.length > 0) inventario = data.inventario;
-          if(data.cuentasHoy && data.cuentasHoy.length > 0) cuentasHoy = data.cuentasHoy;
-          if(data.cuentasPendientes && data.cuentasPendientes.length > 0) cuentasPendientes = data.cuentasPendientes;
-          if(data.registroVentas && data.registroVentas.length > 0) registroVentas = data.registroVentas;
-          if(data.usuarios && data.usuarios.length > 0) usuarios = data.usuarios;
-          if(data.cajaEntradas && data.cajaEntradas.length > 0) cajaEntradas = data.cajaEntradas;
+        if (res.ok) serverData = await res.json();
+      } catch (e) {
+        console.warn("Trabajando en modo local.");
+      }
+
+      let cantidadDatosServidor = 0;
+      if (serverData) {
+        cantidadDatosServidor = (serverData.inventario?.length || 0) + (serverData.cuentasHoy?.length || 0) + (serverData.cuentasPendientes?.length || 0) + (serverData.registroVentas?.length || 0);
+      }
+
+      // 3. Comparamos y decidimos la base de datos "Ganadora"
+      if (serverData && cantidadDatosServidor >= cantidadDatosLocales && cantidadDatosServidor > 0) {
+        // El servidor tiene la base de datos correcta. La descargamos.
+        inventario = serverData.inventario || [];
+        cuentasHoy = serverData.cuentasHoy || [];
+        cuentasPendientes = serverData.cuentasPendientes || [];
+        registroVentas = serverData.registroVentas || [];
+        usuarios = (serverData.usuarios && serverData.usuarios.length > 0) ? serverData.usuarios : [{user:"yhirwin", pass:"Inc.123"}];
+        cajaEntradas = (serverData.cajaEntradas && serverData.cajaEntradas.length > 0) ? serverData.cajaEntradas : generarCajaBase();
+        tasaCambio = serverData.tasa || 840;
+        
+        saveToLocal(); // Actualizamos la PC actual
+      } else {
+        // La PC actual (ej: la de Tomas) tiene los datos buenos.
+        inventario = localInv;
+        cuentasHoy = localHoy;
+        cuentasPendientes = localPend;
+        registroVentas = localReg;
+        usuarios = localUsu.length > 0 ? localUsu : [{user:"yhirwin", pass:"Inc.123"}];
+        cajaEntradas = localCaja.length > 0 ? localCaja : generarCajaBase();
+        tasaCambio = localTasa;
+
+        // Obligamos al servidor a guardar estos datos para que 'yhirwin' los pueda ver después.
+        if (cantidadDatosLocales > 0) {
+          saveToServer();
         }
-      } catch (e) {}
+      }
 
       if (callback) callback();
     }
 
-    // --- NUEVA LÓGICA ROBUSTA DE GUARDADO (Actualiza la UI AL INSTANTE) ---
-    async function saveData() {
-      // 1. Guardar local
+    function saveToLocal() {
       localStorage.setItem('smoothies_tasa', tasaCambio);
       localStorage.setItem('smoothies_inventario', JSON.stringify(inventario));
       localStorage.setItem('smoothies_cuentasHoy', JSON.stringify(cuentasHoy));
@@ -372,11 +387,9 @@
       localStorage.setItem('smoothies_registroVentas', JSON.stringify(registroVentas));
       localStorage.setItem('smoothies_usuarios', JSON.stringify(usuarios));
       localStorage.setItem('smoothies_cajaEntradas', JSON.stringify(cajaEntradas));
+    }
 
-      // 2. ACTUALIZAR PANTALLA (esto garantiza que los botones eliminen visualmente)
-      renderAll();
-
-      // 3. Guardado en servidor (opcional, en segundo plano)
+    async function saveToServer() {
       const payload = { tasa: tasaCambio, inventario, cuentasHoy, cuentasPendientes, registroVentas, usuarios, cajaEntradas };
       try {
         await fetch('/api/state', {
@@ -385,6 +398,13 @@
           body: JSON.stringify(payload)
         });
       } catch (e) {}
+    }
+
+    // Esta función centraliza el guardado local, actualiza la pantalla al instante, y sube al servidor
+    function saveData() {
+      saveToLocal();
+      renderAll();
+      saveToServer();
     }
 
     function toBs(montoUSD) { return (montoUSD * tasaCambio).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Bs.'; }
@@ -423,14 +443,14 @@
     function nav(view) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-terracotta', 'text-white'); 
+        btn.classList.remove('bg-[#c84b23]', 'text-white'); 
         btn.classList.add('text-gray-300');
       });
       document.getElementById(`view-${view}`).classList.remove('hidden');
       const activeBtn = document.getElementById(`nav-${view}`);
       if (activeBtn) {
         activeBtn.classList.remove('text-gray-300');
-        activeBtn.classList.add('bg-terracotta', 'text-white');
+        activeBtn.classList.add('bg-[#c84b23]', 'text-white');
       }
       if (view === 'inicio') renderChart();
     }
@@ -505,13 +525,13 @@
         categoriasUnicas.map(c => `<option value="${c}" ${filtroCat === c ? 'selected' : ''}>${c}</option>`).join('');
 
       const invFiltrado = filtroCat ? inventario.filter(p => p.categoria === filtroCat) : inventario;
-      document.getElementById('tablaInventario').innerHTML = invFiltrado.length === 0 ? '<tr><td colspan="5" class="p-3 text-gray-400 text-center">Sin productos.</td></tr>' :
+      document.getElementById('tablaInventario').innerHTML = invFiltrado.length === 0 ? '<tr><td colspan="5" class="p-3 text-gray-500 text-center">Sin productos.</td></tr>' :
         invFiltrado.map(p => `
           <tr>
-            <td class="p-3 font-semibold">${p.nombre}</td>
-            <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs border">${p.categoria}</span></td>
+            <td class="p-3 font-semibold text-gray-800">${p.nombre}</td>
+            <td class="p-3"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs border border-gray-300">${p.categoria}</span></td>
             <td class="p-3 font-medium text-emerald-600">$${p.precio.toFixed(2)}</td>
-            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs border ${p.stock < 5 ? 'bg-red-100 text-red-700 font-extrabold' : 'bg-emerald-100 text-emerald-800 font-bold'}">${p.stock}</span></td>
+            <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs border ${p.stock < 5 ? 'bg-red-100 text-red-700 font-extrabold border-red-300' : 'bg-emerald-100 text-emerald-800 font-bold border-emerald-300'}">${p.stock}</span></td>
             <td class="p-3 text-right flex gap-2 justify-end">
               <button onclick="modificarStockDirecto(${p.id})" class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded border border-blue-200"><i class="fa-solid fa-pen"></i> Editar</button>
               <button onclick="eliminarProducto(${p.id})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
@@ -552,32 +572,32 @@
         return;
       }
       grid.innerHTML = cuentasHoy.map(c => `
-        <div class="bg-white p-5 rounded-xl shadow border-t-4 border-terracotta flex flex-col justify-between">
+        <div class="bg-white p-5 rounded-xl shadow border-t-4 border-[#c84b23] flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-gray-800">${c.nombre}</h3>
-              <button onclick="borrarCuenta(${c.id})" class="text-red-400 hover:text-red-600 font-bold text-xs"><i class="fa-solid fa-trash-can"></i> Cancelar</button>
+              <h3 class="font-bold text-gray-900">${c.nombre}</h3>
+              <button onclick="borrarCuenta(${c.id})" class="text-red-500 hover:text-red-700 font-bold text-xs"><i class="fa-solid fa-trash-can"></i> Cancelar</button>
             </div>
-            <div class="my-3 border-t border-b py-2 space-y-1.5 min-h-[50px]">
+            <div class="my-3 border-t border-b border-gray-200 py-2 space-y-1.5 min-h-[50px]">
               ${c.pedido.length === 0 ? '<p class="text-xs text-gray-400 italic">Mesa vacía</p>' : c.pedido.map((item, idx) => `
-                  <div class="text-[11px] flex justify-between items-center bg-gray-50 p-1.5 rounded border border-gray-200">
+                  <div class="text-[11px] flex justify-between items-center bg-gray-50 p-1.5 rounded border border-gray-200 text-gray-800">
                     <span>${item.cant}x ${item.nombre} ($${(item.subUSD || 0).toFixed(2)})</span>
                     <button onclick="eliminarProdDeCuenta(${c.id}, ${idx})" class="text-red-500 font-bold px-1 py-0.5 rounded text-xs hover:bg-red-50">✕</button>
                   </div>
                 `).join('')}
             </div>
             <div class="flex gap-1 mt-2">
-              <select id="selProd-${c.id}" class="text-xs border p-1 rounded w-1/3">${inventario.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('')}</select>
-              <select id="selFormato-${c.id}" class="text-xs border p-1 rounded w-1/3">
+              <select id="selProd-${c.id}" class="text-xs border border-gray-300 p-1 rounded w-1/3">${inventario.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('')}</select>
+              <select id="selFormato-${c.id}" class="text-xs border border-gray-300 p-1 rounded w-1/3">
                 <option value="unidad">Unidad</option><option value="tobo6">Medio (x6)</option><option value="tobo12">Tobo (x12)</option>
               </select>
-              <input type="number" id="cantProd-${c.id}" value="1" min="1" class="text-xs border p-1 rounded w-12">
-              <button onclick="agregarProdACuenta(${c.id})" class="bg-navy text-white text-xs px-2 py-1 rounded font-bold">+ Add</button>
+              <input type="number" id="cantProd-${c.id}" value="1" min="1" class="text-xs border border-gray-300 p-1 rounded w-12">
+              <button onclick="agregarProdACuenta(${c.id})" class="bg-slate-900 text-white text-xs px-2 py-1 rounded font-bold hover:bg-slate-800">+ Add</button>
             </div>
           </div>
-          <div class="border-t pt-3 mt-4 flex flex-col items-end">
+          <div class="border-t border-gray-200 pt-3 mt-4 flex flex-col items-end">
              <span class="text-xs text-gray-500">Monto Calculado:</span>
-             <span class="text-lg font-bold text-terracotta">$${(c.montoTotalUSD || 0).toFixed(2)}</span>
+             <span class="text-lg font-bold text-[#c84b23]">$${(c.montoTotalUSD || 0).toFixed(2)}</span>
              <span class="text-sm text-blue-700 font-bold">${(c.montoTotalBs || 0).toLocaleString('es-VE')} Bs.</span>
              <div class="mt-3 flex gap-2 w-full pt-2">
                <select id="pagoMoneda-${c.id}" class="flex-1 text-xs border border-emerald-300 p-2 rounded bg-emerald-50 text-emerald-900 font-bold">
@@ -687,15 +707,15 @@
       let arr = Object.values(map);
       if (filtro) arr = arr.filter(d => d.deudor.toLowerCase().includes(filtro));
 
-      document.getElementById('listaDeudoresAgrupados').innerHTML = arr.length === 0 ? '<div class="p-4 text-gray-400">Sin deudas registradas.</div>' : arr.map(d => `
-        <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white hover:bg-gray-50">
-          <div><h4 class="font-bold text-gray-900"><i class="fa-solid fa-user-tag text-terracotta mr-1.5"></i> ${d.deudor}</h4>
-          <p class="text-xs text-gray-500 mt-1">Conceptos: ${d.items.map(i => i.concepto).join(', ')}</p></div>
+      document.getElementById('listaDeudoresAgrupados').innerHTML = arr.length === 0 ? '<div class="p-4 text-gray-500">Sin deudas registradas.</div>' : arr.map(d => `
+        <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white hover:bg-gray-50 border-b border-gray-100">
+          <div><h4 class="font-bold text-gray-900"><i class="fa-solid fa-user-tag text-[#c84b23] mr-1.5"></i> ${d.deudor}</h4>
+          <p class="text-xs text-gray-600 mt-1">Conceptos: ${d.items.map(i => i.concepto).join(', ')}</p></div>
           <div class="flex items-center gap-4 mt-2 sm:mt-0">
             <span class="text-sm font-extrabold text-amber-600">${fmtDual(d.total)}</span>
             <div class="flex gap-2">
-              <button onclick="editarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded border">Editar</button>
-              <button onclick="saldarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded">Saldar</button>
+              <button onclick="editarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-blue-50 text-blue-700 text-xs px-3 py-1.5 rounded border border-blue-300 font-bold hover:bg-blue-100">Editar</button>
+              <button onclick="saldarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-emerald-700">Saldar</button>
             </div>
           </div>
         </div>
@@ -734,11 +754,11 @@
 
     // REGISTRO Y CAJA
     function renderRegistro() {
-      document.getElementById('tablaRegistro').innerHTML = registroVentas.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin ventas hoy.</td></tr>' : registroVentas.slice().reverse().map(r => `
+      document.getElementById('tablaRegistro').innerHTML = registroVentas.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-500 text-center">Sin ventas hoy.</td></tr>' : registroVentas.slice().reverse().map(r => `
           <tr>
-            <td class="p-3 text-gray-500 text-xs">${r.hora}</td>
-            <td class="p-3 font-bold">${r.nombre} <span class="${r.monedaCobrada === 'BS' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'} px-2 py-0.5 rounded-full text-[10px] ml-1">${r.monedaCobrada}</span></td>
-            <td class="p-3 text-gray-600 text-xs">${r.pedido}</td>
+            <td class="p-3 text-gray-600 text-xs">${r.hora}</td>
+            <td class="p-3 font-bold text-gray-900">${r.nombre} <span class="${r.monedaCobrada === 'BS' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'} px-2 py-0.5 rounded-full text-[10px] ml-1">${r.monedaCobrada}</span></td>
+            <td class="p-3 text-gray-700 text-xs">${r.pedido}</td>
             <td class="p-3 font-bold ${r.monedaCobrada === 'BS' ? 'text-blue-700' : 'text-emerald-600'}">${r.monedaCobrada === 'BS' ? `${(r.montoReal||0).toLocaleString('es-VE')} Bs.` : `$${(r.montoReal||0).toFixed(2)}`}</td>
           </tr>
         `).join('');
@@ -759,7 +779,7 @@
 
     function limpiarCajaSemanal() {
       if (confirm('¿Reiniciar Caja Semanal?')) {
-        cajaEntradas = [{ dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 }, { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 }, { dia: 'Mié', fecha: 'Miércoles', monto: 0, montoUSD: 0, montoBs: 0 }, { dia: 'Jue', fecha: 'Jueves', monto: 0, montoUSD: 0, montoBs: 0 }, { dia: 'Vie', fecha: 'Viernes', monto: 0, montoUSD: 0, montoBs: 0 }];
+        cajaEntradas = generarCajaBase();
         saveData();
       }
     }
@@ -768,8 +788,8 @@
     function renderCaja() {
       document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => `
         <tr class="${idx === getWeekdayIndex() ? 'bg-orange-50 font-bold border-l-4 border-orange-400' : ''}">
-          <td class="p-3">${c.dia} ${idx === getWeekdayIndex() ? '<span class="text-xs text-terracotta ml-1">(Hoy)</span>' : ''}</td>
-          <td class="p-3 text-gray-500">${c.fecha}</td>
+          <td class="p-3 text-gray-800">${c.dia} ${idx === getWeekdayIndex() ? '<span class="text-xs text-[#c84b23] ml-1">(Hoy)</span>' : ''}</td>
+          <td class="p-3 text-gray-600">${c.fecha}</td>
           <td class="p-3"><div class="text-emerald-700 font-bold">$${(c.montoUSD || 0).toFixed(2)} USD</div><div class="text-blue-700 font-bold text-xs">${(c.montoBs || 0).toLocaleString('es-VE')} Bs.</div></td>
         </tr>`).join('');
     }
@@ -779,7 +799,7 @@
       const valInv = inventario.reduce((a, b) => a + (b.precio * b.stock), 0);
       document.getElementById('inf-valor-inv').innerText = `$${valInv.toFixed(2)}`;
       document.getElementById('inf-valor-inv-bs').innerText = toBs(valInv);
-      document.getElementById('tablaInformesStock').innerHTML = inventario.map(p => `<tr><td class="p-3 font-semibold">${p.nombre}</td><td class="p-3">${p.categoria}</td><td class="p-3 font-bold">${p.stock}</td><td class="p-3">${p.stock < 5 ? '⚠️ Bajo' : '✅ Normal'}</td></tr>`).join('');
+      document.getElementById('tablaInformesStock').innerHTML = inventario.map(p => `<tr><td class="p-3 font-semibold text-gray-900">${p.nombre}</td><td class="p-3 text-gray-700">${p.categoria}</td><td class="p-3 font-bold text-gray-900">${p.stock}</td><td class="p-3">${p.stock < 5 ? '<span class="text-red-600 font-bold">⚠️ Bajo</span>' : '<span class="text-emerald-600 font-bold">✅ Normal</span>'}</td></tr>`).join('');
     }
 
     document.getElementById('formUsuario').addEventListener('submit', (e) => {
@@ -790,7 +810,7 @@
     });
 
     function renderUsuarios() {
-      document.getElementById('listaUsuarios').innerHTML = usuarios.map(u => `<li class="p-3 flex justify-between"><span><b>${u.user}</b></span>${u.user !== 'yhirwin' ? `<button onclick="eliminarUsuario('${u.user}')" class="text-red-500 text-xs">Eliminar</button>` : '<span class="text-xs text-gray-400">Admin</span>'}</li>`).join('');
+      document.getElementById('listaUsuarios').innerHTML = usuarios.map(u => `<li class="p-3 flex justify-between text-gray-900"><span><b>${u.user}</b></span>${u.user !== 'yhirwin' ? `<button onclick="eliminarUsuario('${u.user}')" class="text-red-500 font-bold text-xs hover:underline">Eliminar</button>` : '<span class="text-xs text-gray-500 font-bold">Admin</span>'}</li>`).join('');
     }
 
     function eliminarUsuario(u) { if (confirm(`¿Eliminar ${u}?`)) { usuarios = usuarios.filter(x => x.user !== u); saveData(); } }
