@@ -131,7 +131,7 @@
             <div class="flex items-center">
               <i class="fa-solid fa-triangle-exclamation text-red-500 text-xl mr-3"></i>
               <div>
-                <h3 class="text-sm font-bold text-red-800">¡Alerta de Stock Bajo! (Menos de 20 unidades)</h3>
+                <h3 class="text-sm font-bold text-red-800">¡Alerta de Stock Bajo! (Menos de 5 unidades)</h3>
                 <p class="text-xs text-red-600 mt-0.5" id="textoAlertaStock"></p>
               </div>
             </div>
@@ -188,7 +188,7 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Registrar Deuda (Descuenta de Inventario)</h2>
             <form id="formNuevaDeuda" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <input type="text" id="deudorNombre" placeholder="Deudor (Ej: Pedro)" required class="border p-2.5 rounded-lg text-sm">
+              <input type="text" id="deudorNombre" placeholder="Deudor (Ej: Jose)" required class="border p-2.5 rounded-lg text-sm">
               <select id="deudorProducto" required class="border p-2.5 rounded-lg text-sm"></select>
               <input type="number" id="deudorCant" value="1" min="1" required class="border p-2.5 rounded-lg text-sm">
               <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-lg text-sm">
@@ -197,19 +197,15 @@
             </form>
           </div>
 
+          <!-- Filtro de Deudas por Persona -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+            <i class="fa-solid fa-filter text-gray-400"></i>
+            <input type="text" id="filtroDeudor" placeholder="Filtrar deudas por nombre de persona..." class="w-full border p-2 rounded-lg text-sm" oninput="renderCuentasPendientes()">
+          </div>
+
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-4 border-b font-bold bg-gray-50">Lista de Deudores Pendientes</div>
-            <table class="w-full text-left text-sm">
-              <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr>
-                  <th class="p-3">Deudor</th>
-                  <th class="p-3">Pedido</th>
-                  <th class="p-3">Monto ($ / Bs.)</th>
-                  <th class="p-3 text-right">Acción</th>
-                </tr>
-              </thead>
-              <tbody id="tablaPendientes" class="divide-y divide-gray-100"></tbody>
-            </table>
+            <div class="p-4 border-b font-bold bg-gray-50">Lista de Deudores Agrupados</div>
+            <div id="listaDeudoresAgrupados" class="divide-y divide-gray-100"></div>
           </div>
         </div>
 
@@ -217,7 +213,7 @@
         <div id="view-inventario" class="view-panel hidden space-y-6">
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h2 class="text-lg font-bold text-gray-800 mb-1">Añadir Producto al Inventario</h2>
-            <p class="text-xs text-gray-500 mb-4">Agrega las cervezas por unidades individuales. El sistema calcula tobos y medios tobos.</p>
+            <p class="text-xs text-gray-500 mb-4">Agrega las cervezas o productos. Si se acaban, puedes modificar el stock directamente abajo.</p>
             <form id="formProducto" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <input type="text" id="prodNombre" placeholder="Nombre (Ej: Cerveza Zulia)" required class="border p-2.5 rounded-lg text-sm">
               <div>
@@ -232,6 +228,14 @@
             </form>
           </div>
 
+          <!-- Filtro de Inventario por Categoría -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3">
+            <i class="fa-solid fa-tags text-gray-400"></i>
+            <select id="filtroCategoriaInv" class="w-full border p-2 rounded-lg text-sm" onchange="renderInventario()">
+              <option value="">-- Filtrar por categoría (Todas) --</option>
+            </select>
+          </div>
+
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="p-4 border-b font-bold bg-gray-50">Stock Actual del Negocio</div>
             <table class="w-full text-left text-sm">
@@ -241,7 +245,7 @@
                   <th class="p-3">Categoría</th>
                   <th class="p-3">Precio Base ($)</th>
                   <th class="p-3">Stock Unids.</th>
-                  <th class="p-3 text-right">Acción</th>
+                  <th class="p-3 text-right">Acción / Modificar Stock</th>
                 </tr>
               </thead>
               <tbody id="tablaInventario" class="divide-y divide-gray-100"></tbody>
@@ -390,16 +394,13 @@
       return 1;
     }
 
-    // CARGAR Y AUTO-MIGRAR DATOS LOCALES AL SERVIDOR SI EXISTEN
     async function loadState(callback) {
       try {
         const res = await fetch('/api/state');
         const data = await res.json();
         
-        // Si el servidor está vacío (ej: inventario vacío) pero hay datos viejos en el navegador local, los migramos automáticamente
         const localInv = localStorage.getItem('smoothies_inventario');
         if ((!data.inventario || data.inventario.length === 0) && localInv && JSON.parse(localInv).length > 0) {
-          console.log("Migrando datos locales antiguos al servidor...");
           const migrarPayload = {
             tasa: parseFloat(localStorage.getItem('smoothies_tasa') || 840),
             inventario: JSON.parse(localStorage.getItem('smoothies_inventario') || '[]'),
@@ -416,7 +417,6 @@
             body: JSON.stringify(migrarPayload)
           });
           
-          // Volver a consultar ya migrado
           const res2 = await fetch('/api/state');
           const data2 = await res2.json();
           asignarDatos(data2);
@@ -440,7 +440,6 @@
       cajaEntradas = data.cajaEntradas;
     }
 
-    // GUARDAR ESTADO EN EL SERVIDOR
     async function saveData() {
       const payload = { tasa: tasaCambio, inventario, cuentasHoy, cuentasPendientes, registroVentas, usuarios, cajaEntradas };
       try {
@@ -462,7 +461,6 @@
       return `$${montoUSD.toFixed(2)} / ${toBs(montoUSD)}`;
     }
 
-    // AUTH
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const u = document.getElementById('username').value.trim();
@@ -498,7 +496,6 @@
       }
     });
 
-    // POLLING EN VIVO CADA 3 SEGUNDOS PARA SINCRONIZAR DISPOSITIVOS
     setInterval(async () => {
       if (localStorage.getItem('smoothies_auth') === 'true') {
         await loadState(() => renderAll());
@@ -533,10 +530,11 @@
       saveData();
     });
 
+    // ALERTA DE STOCK BAJO (< 5 UNIDADES)
     function renderStockAlerts() {
       const alertaBox = document.getElementById('alertaStockBajo');
       const textoAlerta = document.getElementById('textoAlertaStock');
-      const bajoStock = inventario.filter(p => p.stock < 20);
+      const bajoStock = inventario.filter(p => p.stock < 5);
 
       if (bajoStock.length > 0) {
         alertaBox.classList.remove('hidden');
@@ -591,27 +589,61 @@
       saveData();
     });
 
+    // INVENTARIO CON MODIFICACIÓN DIRECTA DE STOCK, FILTRO Y COLORES
     function renderInventario() {
+      const filtroCat = document.getElementById('filtroCategoriaInv').value;
+      const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
+      
+      // Actualizar opciones del selector de filtro
+      document.getElementById('filtroCategoriaInv').innerHTML = '<option value="">-- Filtrar por categoría (Todas) --</option>' +
+        categoriasUnicas.map(c => `<option value="${c}" ${filtroCat === c ? 'selected' : ''}>${c}</option>`).join('');
+
+      const inventarioFiltrado = filtroCat ? inventario.filter(p => p.categoria === filtroCat) : inventario;
+
       const tbody = document.getElementById('tablaInventario');
-      tbody.innerHTML = inventario.length === 0 ? '<tr><td colspan="5" class="p-3 text-gray-400">Sin productos.</td></tr>' :
-        inventario.map(p => `
+      tbody.innerHTML = inventarioFiltrado.length === 0 ? '<tr><td colspan="5" class="p-3 text-gray-400">Sin productos.</td></tr>' :
+        inventarioFiltrado.map(p => {
+          const esRojo = p.stock < 5;
+          const colorClase = esRojo ? 'bg-red-100 text-red-700 border-red-300 font-extrabold' : 'bg-emerald-100 text-emerald-800 border-emerald-300 font-bold';
+          return `
           <tr>
             <td class="p-3 font-semibold">${p.nombre}</td>
             <td class="p-3 text-gray-500"><span class="bg-gray-100 px-2 py-1 rounded text-xs border">${p.categoria}</span></td>
             <td class="p-3 font-medium">$${p.precio.toFixed(2)}</td>
-            <td class="p-3"><b class="${p.stock < 20 ? 'text-red-600 font-extrabold' : 'text-gray-700'}">${p.stock} unids.</b></td>
-            <td class="p-3 text-right"><button onclick="inventario=inventario.filter(x=>x.id!=${p.id});saveData();" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td>
+            <td class="p-3">
+              <span class="px-2.5 py-1 rounded-full text-xs border ${colorClase}">${p.stock} unids.</span>
+            </td>
+            <td class="p-3 text-right flex items-center justify-end gap-2">
+              <button onclick="modificarStockDirecto(${p.id})" class="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded border border-blue-200">
+                <i class="fa-solid fa-pen"></i> Editar Stock
+              </button>
+              <button onclick="inventario=inventario.filter(x=>x.id!=${p.id});saveData();" class="text-red-500 hover:text-red-700 p-1">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
 
-      const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
       document.getElementById('listCategorias').innerHTML = categoriasUnicas.map(c => `<option value="${c}">`).join('');
-
       const selectDeuda = document.getElementById('deudorProducto');
       selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
     }
 
-    document.getElementById('formNuevaCuentaHoy').addEventListener('submit', (e) => {
+    function modificarStockDirecto(id) {
+      const prod = inventario.find(p => p.id === id);
+      if (!prod) return;
+      const nuevoStock = prompt(`Modificar stock para "${prod.nombre}"\nStock actual: ${prod.stock}\nIngrese la nueva cantidad en unidades:`, prod.stock);
+      if (nuevoStock === null) return;
+      const parsed = parseInt(nuevoStock);
+      if (isNaN(parsed) || parsed < 0) return alert('Cantidad inválida.');
+      prod.stock = parsed;
+      saveData();
+    }
+
+    document.getElementById('formNuevacuentaHoy') // (Manejado abajo)
+    
+    document.getElementById('formNuevaCuentaHoy')?.addEventListener('submit', (e) => {
       e.preventDefault();
       cuentasHoy.push({
         id: Date.now(),
@@ -805,6 +837,8 @@
       cuentasPendientes.push({
         id: Date.now(),
         deudor: deudor,
+        prodId: prod.id,
+        cantidad: cant,
         concepto: `${cant}x ${prod.nombre}`,
         monto: prod.precio * cant
       });
@@ -812,53 +846,93 @@
       saveData();
     });
 
+    // RENDER DE DEUDAS AGRUPADAS POR PERSONA, FILTRADAS, CON EDICIÓN Y ELIMINACIÓN
     function renderCuentasPendientes() {
-      const tbody = document.getElementById('tablaPendientes');
-      tbody.innerHTML = cuentasPendientes.length === 0 ? '<tr><td colspan="4" class="p-3 text-gray-400">Sin deudas.</td></tr>' :
-        cuentasPendientes.map(p => `
-          <tr>
-            <td class="p-3 font-semibold">${p.deudor}</td>
-            <td class="p-3 text-gray-500">${p.concepto}</td>
-            <td class="p-3 font-bold text-amber-600">${fmtDual(p.monto)}</td>
-            <td class="p-3 text-right flex gap-2 justify-end">
-              <button onclick="abonarDeuda(${p.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Pagar Monto</button>
-              <button onclick="saldarDeuda(${p.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Saldar Total</button>
-            </td>
-          </tr>
-        `).join('');
+      const filtro = document.getElementById('filtroDeudor').value.toLowerCase().trim();
+      const contenedor = document.getElementById('listaDeudoresAgrupados');
+
+      // Agrupar por deudor
+      const deudoresMap = {};
+      cuentasPendientes.forEach(p => {
+        if (!deudoresMap[p.deudor]) {
+          deudoresMap[p.deudor] = { deudor: p.deudor, items: [], totalMonto: 0 };
+        }
+        deudoresMap[p.deudor].items.push(p);
+        deudoresMap[p.deudor].totalMonto += p.monto;
+      });
+
+      let deudoresArray = Object.values(deudoresMap);
+      if (filtro) {
+        deudoresArray = deudoresArray.filter(d => d.deudor.toLowerCase().includes(filtro));
+      }
+
+      if (deudoresArray.length === 0) {
+        contenedor.innerHTML = '<div class="p-4 text-gray-400 text-sm">No hay deudores pendientes registrados.</div>';
+        return;
+      }
+
+      contenedor.innerHTML = deudoresArray.map(d => `
+        <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white hover:bg-gray-50">
+          <div>
+            <h4 class="font-bold text-gray-900 text-base"><i class="fa-solid fa-user-tag text-terracotta mr-1.5"></i> ${d.deudor}</h4>
+            <p class="text-xs text-gray-500 mt-1"><b>Conceptos:</b> ${d.items.map(i => `${i.concepto}`).join(', ')}</p>
+          </div>
+          <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+            <div class="text-right">
+              <span class="text-sm font-extrabold text-amber-600">${fmtDual(d.totalMonto)}</span>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="editarDeudorCompleto('${d.deudor}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1.5 rounded border border-blue-200" title="Editar deudas de esta persona">
+                <i class="fa-solid fa-pen"></i> Editar
+              </button>
+              <button onclick="saldarDeudorCompleto('${d.deudor}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow">
+                Saldar Todo
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    function abonarDeuda(id) {
-      const p = cuentasPendientes.find(x => x.id === id);
-      if (!p) return;
-      const montoStr = prompt(`Deuda actual: $${p.monto.toFixed(2)}\nIngrese el monto a abonar ($ USD):`, p.monto.toFixed(2));
-      if (montoStr === null) return;
-      const montoPago = parseFloat(montoStr);
-      if (isNaN(montoPago) || montoPago <= 0) return alert('Monto inválido.');
+    function editarDeudorCompleto(nombreDeudor) {
+      const deudasPersona = cuentasPendientes.filter(x => x.deudor === nombreDeudor);
+      let mensaje = `Deudas actuales de ${nombreDeudor}:\n`;
+      deudasPersona.forEach((d, idx) => {
+        mensaje += `[${idx + 1}] ${d.concepto} - $${d.monto.toFixed(2)}\n`;
+      });
+      mensaje += `\nEscribe el número de la deuda individual que deseas ELIMINAR (o escribe 0 para cancelar):`;
+      
+      const opcion = prompt(mensaje);
+      if (opcion === null || opcion === "0") return;
+      const indexEliminar = parseInt(opcion) - 1;
 
-      const montoRealAbono = Math.min(montoPago, p.monto);
-      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Abono Deuda (${p.deudor})`, pedido: p.concepto, montoTotal: montoRealAbono, monedaCobrada: 'USD', montoReal: montoRealAbono });
+      if (!isNaN(indexEliminar) && deudasPersona[indexEliminar]) {
+        const itemABorrar = deudasPersona[indexEliminar];
+        // Devolver stock al inventario
+        const prod = inventario.find(p => p.id === itemABorrar.prodId);
+        if (prod) prod.stock += itemABorrar.cantidad;
 
-      const dayIdx = getWeekdayIndex();
-      cajaEntradas[dayIdx].monto += montoRealAbono;
-      cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + montoRealAbono;
-      p.monto -= montoRealAbono;
-
-      if (p.monto <= 0.001) cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
-      saveData();
+        cuentasPendientes = cuentasPendientes.filter(x => x.id !== itemABorrar.id);
+        saveData();
+        alert('Deuda eliminada y stock devuelto al inventario exitosamente.');
+      } else {
+        alert('Opción inválida.');
+      }
     }
 
-    function saldarDeuda(id) {
-      const p = cuentasPendientes.find(x => x.id === id);
-      if (!p) return;
-      if (!confirm(`¿Cobrar deuda total de $${p.monto.toFixed(2)}?`)) return;
+    function saldarDeudorCompleto(nombreDeudor) {
+      const deudasPersona = cuentasPendientes.filter(x => x.deudor === nombreDeudor);
+      const totalMonto = deudasPersona.reduce((a, b) => a + b.monto, 0);
+      if (!confirm(`¿Cobrar el total de deudas de ${nombreDeudor} por $${totalMonto.toFixed(2)}?`)) return;
 
-      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Cobro Total Deuda (${p.deudor})`, pedido: p.concepto, montoTotal: p.monto, monedaCobrada: 'USD', montoReal: p.monto });
+      const conceptosStr = deudasPersona.map(i => i.concepto).join(', ');
+      registroVentas.push({ id: Date.now(), hora: new Date().toLocaleTimeString(), nombre: `Cobro Deuda (${nombreDeudor})`, pedido: conceptosStr, montoTotal: totalMonto, monedaCobrada: 'USD', montoReal: totalMonto });
 
       const dayIdx = getWeekdayIndex();
-      cajaEntradas[dayIdx].monto += p.monto;
-      cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + p.monto;
-      cuentasPendientes = cuentasPendientes.filter(x => x.id !== id);
+      cajaEntradas[dayIdx].monto += totalMonto;
+      cajaEntradas[dayIdx].montoUSD = (cajaEntradas[dayIdx].montoUSD || 0) + totalMonto;
+
+      cuentasPendientes = cuentasPendientes.filter(x => x.deudor !== nombreDeudor);
       saveData();
     }
 
@@ -942,7 +1016,7 @@
             <td class="p-3 text-gray-500">${p.categoria}</td>
             <td class="p-3 font-bold">${p.stock} unids.</td>
             <td class="p-3">
-              ${p.stock < 20 ? '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Bajo</span>' : '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
+              ${p.stock < 5 ? '<span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">⚠️ Bajo (<5)</span>' : '<span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">✅ Normal</span>'}
             </td>
           </tr>
         `).join('');
