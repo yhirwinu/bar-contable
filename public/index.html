@@ -431,13 +431,19 @@
     }
 
     function asignarDatos(data) {
-      tasaCambio = data.tasa;
-      inventario = data.inventario;
-      cuentasHoy = data.cuentasHoy;
-      cuentasPendientes = data.cuentasPendientes;
-      registroVentas = data.registroVentas;
-      usuarios = data.usuarios;
-      cajaEntradas = data.cajaEntradas;
+      tasaCambio = data.tasa || 840;
+      inventario = data.inventario || [];
+      cuentasHoy = data.cuentasHoy || [];
+      cuentasPendientes = data.cuentasPendientes || [];
+      registroVentas = data.registroVentas || [];
+      usuarios = data.usuarios || [{user:"yhirwin", pass:"Inc.123"}];
+      cajaEntradas = data.cajaEntradas || [
+        { dia: 'Lun', fecha: 'Lunes', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Mar', fecha: 'Martes', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Mié', fecha: 'Miércoles', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Jue', fecha: 'Jueves', monto: 0, montoUSD: 0, montoBs: 0 },
+        { dia: 'Vie', fecha: 'Viernes', monto: 0, montoUSD: 0, montoBs: 0 }
+      ];
     }
 
     async function saveData() {
@@ -480,6 +486,7 @@
       localStorage.removeItem('smoothies_auth');
       location.reload();
     }
+    window.logout = logout;
 
     function showApp() {
       document.getElementById('loginScreen').classList.add('hidden');
@@ -496,12 +503,6 @@
       }
     });
 
-    setInterval(async () => {
-      if (localStorage.getItem('smoothies_auth') === 'true') {
-        await loadState(() => renderAll());
-      }
-    }, 3000);
-
     function nav(view) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('bg-terracotta', 'text-gray-300'));
@@ -510,6 +511,7 @@
       if (activeBtn) activeBtn.classList.replace('text-gray-300', 'bg-terracotta');
       if (view === 'inicio') renderChart();
     }
+    window.nav = nav;
 
     function renderAll() {
       document.getElementById('displayTasa').innerText = `$1 USD = ${tasaCambio.toFixed(2)} Bs.`;
@@ -530,7 +532,6 @@
       saveData();
     });
 
-    // ALERTA DE STOCK BAJO (< 5 UNIDADES)
     function renderStockAlerts() {
       const alertaBox = document.getElementById('alertaStockBajo');
       const textoAlerta = document.getElementById('textoAlertaStock');
@@ -589,12 +590,10 @@
       saveData();
     });
 
-    // INVENTARIO CON MODIFICACIÓN DIRECTA DE STOCK, FILTRO Y COLORES
     function renderInventario() {
       const filtroCat = document.getElementById('filtroCategoriaInv').value;
       const categoriasUnicas = [...new Set(inventario.map(p => p.categoria))];
       
-      // Actualizar opciones del selector de filtro
       document.getElementById('filtroCategoriaInv').innerHTML = '<option value="">-- Filtrar por categoría (Todas) --</option>' +
         categoriasUnicas.map(c => `<option value="${c}" ${filtroCat === c ? 'selected' : ''}>${c}</option>`).join('');
 
@@ -617,7 +616,7 @@
               <button onclick="modificarStockDirecto(${p.id})" class="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded border border-blue-200">
                 <i class="fa-solid fa-pen"></i> Editar Stock
               </button>
-              <button onclick="inventario=inventario.filter(x=>x.id!=${p.id});saveData();" class="text-red-500 hover:text-red-700 p-1">
+              <button onclick="eliminarProducto(${p.id})" class="text-red-500 hover:text-red-700 p-1">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </td>
@@ -629,6 +628,7 @@
       const selectDeuda = document.getElementById('deudorProducto');
       selectDeuda.innerHTML = inventario.map(p => `<option value="${p.id}">${p.nombre} ($${p.precio.toFixed(2)})</option>`).join('');
     }
+    window.renderInventario = renderInventario;
 
     function modificarStockDirecto(id) {
       const prod = inventario.find(p => p.id === id);
@@ -640,10 +640,17 @@
       prod.stock = parsed;
       saveData();
     }
+    window.modificarStockDirecto = modificarStockDirecto;
 
-    document.getElementById('formNuevacuentaHoy') // (Manejado abajo)
-    
-    document.getElementById('formNuevaCuentaHoy')?.addEventListener('submit', (e) => {
+    function eliminarProducto(id) {
+      if (confirm("¿Estás seguro de eliminar este producto del inventario?")) {
+        inventario = inventario.filter(x => x.id !== id);
+        saveData();
+      }
+    }
+    window.eliminarProducto = eliminarProducto;
+
+    document.getElementById('formNuevaCuentaHoy').addEventListener('submit', (e) => {
       e.preventDefault();
       cuentasHoy.push({
         id: Date.now(),
@@ -761,6 +768,7 @@
 
       saveData();
     }
+    window.agregarProdACuenta = agregarProdACuenta;
 
     function eliminarProdDeCuenta(cuentaId, itemIdx) {
       const cuenta = cuentasHoy.find(c => c.id === cuentaId);
@@ -779,6 +787,7 @@
       cuenta.pedido.splice(itemIdx, 1);
       saveData();
     }
+    window.eliminarProdDeCuenta = eliminarProdDeCuenta;
 
     function borrarCuenta(cuentaId) {
       const cuenta = cuentasHoy.find(c => c.id === cuentaId);
@@ -792,6 +801,7 @@
         saveData();
       }
     }
+    window.borrarCuenta = borrarCuenta;
 
     function cobrarCuenta(cuentaId) {
       const cuentaIndex = cuentasHoy.findIndex(c => c.id === cuentaId);
@@ -823,6 +833,7 @@
       cuentasHoy.splice(cuentaIndex, 1);
       saveData();
     }
+    window.cobrarCuenta = cobrarCuenta;
 
     document.getElementById('formNuevaDeuda').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -846,12 +857,11 @@
       saveData();
     });
 
-    // RENDER DE DEUDAS AGRUPADAS POR PERSONA, FILTRADAS, CON EDICIÓN Y ELIMINACIÓN
     function renderCuentasPendientes() {
-      const filtro = document.getElementById('filtroDeudor').value.toLowerCase().trim();
+      const filtroEl = document.getElementById('filtroDeudor');
+      const filtro = filtroEl ? filtroEl.value.toLowerCase().trim() : '';
       const contenedor = document.getElementById('listaDeudoresAgrupados');
 
-      // Agrupar por deudor
       const deudoresMap = {};
       cuentasPendientes.forEach(p => {
         if (!deudoresMap[p.deudor]) {
@@ -882,10 +892,10 @@
               <span class="text-sm font-extrabold text-amber-600">${fmtDual(d.totalMonto)}</span>
             </div>
             <div class="flex gap-2">
-              <button onclick="editarDeudorCompleto('${d.deudor}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1.5 rounded border border-blue-200" title="Editar deudas de esta persona">
+              <button onclick="editarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1.5 rounded border border-blue-200" title="Editar deudas de esta persona">
                 <i class="fa-solid fa-pen"></i> Editar
               </button>
-              <button onclick="saldarDeudorCompleto('${d.deudor}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow">
+              <button onclick="saldarDeudorCompleto('${d.deudor.replace(/'/g, "\\'")}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow">
                 Saldar Todo
               </button>
             </div>
@@ -893,6 +903,7 @@
         </div>
       `).join('');
     }
+    window.renderCuentasPendientes = renderCuentasPendientes;
 
     function editarDeudorCompleto(nombreDeudor) {
       const deudasPersona = cuentasPendientes.filter(x => x.deudor === nombreDeudor);
@@ -908,7 +919,6 @@
 
       if (!isNaN(indexEliminar) && deudasPersona[indexEliminar]) {
         const itemABorrar = deudasPersona[indexEliminar];
-        // Devolver stock al inventario
         const prod = inventario.find(p => p.id === itemABorrar.prodId);
         if (prod) prod.stock += itemABorrar.cantidad;
 
@@ -919,6 +929,7 @@
         alert('Opción inválida.');
       }
     }
+    window.editarDeudorCompleto = editarDeudorCompleto;
 
     function saldarDeudorCompleto(nombreDeudor) {
       const deudasPersona = cuentasPendientes.filter(x => x.deudor === nombreDeudor);
@@ -935,6 +946,7 @@
       cuentasPendientes = cuentasPendientes.filter(x => x.deudor !== nombreDeudor);
       saveData();
     }
+    window.saldarDeudorCompleto = saldarDeudorCompleto;
 
     function renderRegistro() {
       const tbody = document.getElementById('tablaRegistro');
@@ -959,6 +971,7 @@
         saveData();
       }
     }
+    window.vaciarRegistroDia = vaciarRegistroDia;
 
     document.getElementById('formCajaEntrada').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -982,6 +995,7 @@
         saveData();
       }
     }
+    window.limpiarCajaSemanal = limpiarCajaSemanal;
 
     function renderCaja() {
       document.getElementById('tablaCajaDiaria').innerHTML = cajaEntradas.map((c, idx) => `
@@ -1048,6 +1062,7 @@
         saveData();
       }
     }
+    window.eliminarUsuario = eliminarUsuario;
   </script>
 </body>
 </html>
